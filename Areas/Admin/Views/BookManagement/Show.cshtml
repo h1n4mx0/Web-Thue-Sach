@@ -1,0 +1,117 @@
+@model LibraryManager.Areas.Admin.Models.PagedResult<LibraryManager.Models.Books>
+
+<body>
+<div class="page-header">
+    <h2 class="page-title">Quản lý sách</h2>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Quản lý</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Quản lý sách</li>
+        </ol>
+    </nav>
+</div>
+
+<div class="search-field">
+    <form class="d-flex align-items-center" action="@Url.Action("AdvancedSearch", "BookManagement")" method="get">
+        <div class="input-group">
+            <div class="input-group-prepend bg-transparent">
+                <i class="input-group-text border-0 mdi mdi-magnify"></i>
+            </div>
+            <input type="text" class="form-control bg-transparent border-0" name="query" placeholder="Tìm kiếm nâng cao (ví dụ: author:xyz, category:fiction, price:[1000 TO 100000])">
+        </div>
+        <button type="submit" class="btn btn-inverse-success btn-icon"><i class="mdi mdi-magnify"></i></button>
+    </form>
+</div>
+
+<div class="d-flex justify-content-end align-items-center mb-3">
+    <p class="mb-0 me-2">Thêm sách</p> 
+    <a href="/Admin/BookManagement/Create" class="btn btn-gradient-info btn-rounded btn-icon d-flex justify-content-center align-items-center p-0" title="Thêm sách mới">
+        <i class="mdi mdi-plus"></i>
+    </a>
+</div>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Ảnh bìa</th>
+            <th>Tiêu đề</th>
+            <th>Tác giả</th>
+            <th>Thể loại</th>
+            <th>ISBN</th>
+            <th>Năm xuất bản</th>
+            <th>Trạng thái</th>
+            <th>Giá thuê</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (!Model.Items.Any())
+        {
+            <tr>
+                <td colspan="9" class="text-center">Không có sách nào</td>
+            </tr>
+        }
+        else
+        {
+            foreach (var book in Model.Items)
+            {
+                <tr>
+                    <td><img src="@Url.Content(book.CoverImage)" alt="Book Cover" width="50" /></td>
+                    <td>@book.Title</td>
+                    <td>@book.Author?.Name</td>
+                    <td>@book.Category?.Name</td>
+                    <td>@book.ISBN</td>
+                    <td>@book.PublishedYear</td>
+                    <td>
+                        @if (book.Status == "Đã hoàn thành")
+                        {
+                            <label class="badge badge-success">@book.Status</label>
+                        }
+                        else
+                        {
+                            <label class="badge badge-warning">@book.Status</label>
+                        }
+                    </td>
+                    <td>@book.RentalPrice</td>
+                    <td class="d-flex justify-content-start">
+                        <form asp-action="Edit" asp-route-id="@book.Id" method="post" class="me-1"> 
+                            <button type="submit" class="btn btn-gradient-dark btn-icon-text btn-rounded"><i class="mdi mdi-table-edit btn-icon-prepend"></i>Sửa</button>
+                        </form>
+                        <form asp-action="Delete" asp-route-id="@book.Id" method="post" onsubmit="return confirm('Bạn có chắc chắn muốn xóa sách này?');">
+                            <button type="submit" class="btn btn-gradient-danger btn-icon-text btn-rounded">
+                                <i class="mdi mdi-delete-empty btn-icon-prepend"></i>Xóa
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<!-- Phân trang -->
+<nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+        @if (Model.HasPreviousPage)
+        {
+            <li class="page-item">
+                <a class="page-link" href="?page=@(Model.PageNumber - 1)&pageSize=@Model.PageSize">Previous</a>
+            </li>
+        }
+
+        @for (var i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                <a class="page-link" href="?page=@i&pageSize=@Model.PageSize">@i</a>
+            </li>
+        }
+
+        @if (Model.HasNextPage)
+        {
+            <li class="page-item">
+                <a class="page-link" href="?page=@(Model.PageNumber + 1)&pageSize=@Model.PageSize">Next</a>
+            </li>
+        }
+    </ul>
+</nav>
+</body>

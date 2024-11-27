@@ -1,0 +1,122 @@
+@Html.AntiForgeryToken()
+<div class="page-header">
+    <h3 class="page-title"> Quản lý người dùng </h3>
+    <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">Quản lý</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Quản lý người dùng</li>
+    </ol>
+    </nav>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <input type="hidden" id="userId" name="userId" value="@user.Id"/>
+                <td>@user.Id</td>
+                <td>@user.Username</td>
+                <td>@user.Email</td>
+                <td>@user.Role?.RoleName</td> 
+                <td>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editRoleModal" data-user-id="@user.Id" data-user-name="@user.Username">
+                        Edit Role
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="modal fade" id="editRoleModal" tabindex="-1" aria-labelledby="editRoleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editRoleModalLabel">Edit Role for <span id="modalUserName"></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editRoleForm">
+                    <div class="mb-3">
+                        <label for="role" class="form-label">Select New Role</label>
+                        <select class="form-control" id="role" name="role">
+                            @foreach (var role in ViewBag.Roles)
+                            {
+                                <option value="@role.Id">@role.RoleName</option> 
+                            }
+                        </select>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Confirm</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Toast thông báo -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="successToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+                Role updated successfully!
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var editRoleModal = document.getElementById('editRoleModal');
+
+        editRoleModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var userId = button.getAttribute('data-user-id');
+            var userName = button.getAttribute('data-user-name');
+
+            document.getElementById('userId').value = userId;
+            document.getElementById('modalUserName').textContent = userName;
+        });
+
+        // Xử lý form submit
+        document.getElementById('editRoleForm').addEventListener('submit', function (event) {
+            event.preventDefault(); 
+
+            var userId = document.getElementById('userId').value;
+            var newRole = document.getElementById('role').value;
+
+            fetch(`/Admin/UserManagement/EditRole/userId=${encodeURIComponent(userId)}&roleId=${encodeURIComponent(newRole)}`, {
+                method: 'GET'             
+            })
+            .then(response => {
+                if (response.ok) {
+                    var modal = bootstrap.Modal.getInstance(editRoleModal);
+                    modal.hide();
+
+                    var toastElement = document.getElementById('successToast');
+                    var toast = new bootstrap.Toast(toastElement);
+                    toast.show();
+                } else {
+                    alert('Failed to update role!');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    });
+</script>
+
+

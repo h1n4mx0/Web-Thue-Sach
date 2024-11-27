@@ -1,0 +1,127 @@
+-- Bảng Users: Quản lý thông tin cá nhân của người dùng
+CREATE TABLE IF NOT EXISTS Users (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    FullName VARCHAR(255) NOT NULL,
+    DateOfBirth DATE,
+    Address VARCHAR(255),
+    Phone VARCHAR(20),
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Bảng UserAccounts: Quản lý thông tin tài khoản của người dùng
+CREATE TABLE IF NOT EXISTS UserAccounts (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    UserId INT NOT NULL,
+    Username VARCHAR(50) NOT NULL UNIQUE,
+    Password VARCHAR(255) NOT NULL,
+    Email VARCHAR(255) UNIQUE,
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (UserId) REFERENCES Users(Id) ON DELETE CASCADE
+);
+
+-- Bảng Authors: Quản lý thông tin tác giả
+CREATE TABLE IF NOT EXISTS Authors (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    Name VARCHAR(255) NOT NULL,
+    Bio TEXT
+);
+
+-- Bảng Categories: Quản lý thể loại sách
+CREATE TABLE IF NOT EXISTS Categories (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    Name VARCHAR(100) NOT NULL
+);
+
+-- Bảng Books: Quản lý thông tin sách
+CREATE TABLE IF NOT EXISTS Books (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    Title VARCHAR(255) NOT NULL,
+    CategoryId INT,
+    AuthorId INT,
+    ISBN VARCHAR(20) UNIQUE,
+    PublishedYear YEAR,
+    Summary TEXT,
+    FOREIGN KEY (CategoryId) REFERENCES Categories(Id),
+    FOREIGN KEY (AuthorId) REFERENCES Authors(Id)
+);
+
+-- Bảng BookCopies: Quản lý các bản sao của mỗi cuốn sách
+CREATE TABLE IF NOT EXISTS BookCopies (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    BookId INT NOT NULL,
+    CopyNumber INT NOT NULL,
+    Status ENUM('Available', 'Borrowed', 'Reserved') DEFAULT 'Available',
+    FOREIGN KEY (BookId) REFERENCES Books(Id) ON DELETE CASCADE
+);
+
+-- Bảng BorrowRecords: Lưu trữ thông tin mượn sách
+CREATE TABLE IF NOT EXISTS BorrowRecords (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    UserId INT NOT NULL,
+    BookCopyId INT NOT NULL,
+    BorrowDate DATE,
+    ReturnDate DATE,
+    FOREIGN KEY (UserId) REFERENCES Users(Id) ON DELETE CASCADE,
+    FOREIGN KEY (BookCopyId) REFERENCES BookCopies(Id) ON DELETE CASCADE
+);
+
+-- Bảng Chapters: Quản lý thông tin các chương của sách
+CREATE TABLE IF NOT EXISTS Chapters (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    BookId INT NOT NULL,
+    ChapterNumber INT NOT NULL,
+    Title VARCHAR(255),
+    FilePath VARCHAR(255),
+    FOREIGN KEY (BookId) REFERENCES Books(Id) ON DELETE CASCADE
+);
+-- Thêm các thể loại vào bảng Categories
+
+-- Sách tư duy – kỹ năng sống
+INSERT INTO Categories (Name) VALUES ('Sách phong cách sống');
+INSERT INTO Categories (Name) VALUES ('Sách tư duy');
+INSERT INTO Categories (Name) VALUES ('Sách tâm lý học');
+INSERT INTO Categories (Name) VALUES ('Sách nghệ thuật sống');
+INSERT INTO Categories (Name) VALUES ('Sách kỹ năng làm việc');
+INSERT INTO Categories (Name) VALUES ('Sách làm cha mẹ');
+
+-- Sách văn học
+INSERT INTO Categories (Name) VALUES ('Văn học kinh điển');
+INSERT INTO Categories (Name) VALUES ('Sách Tiểu sử – Hồi ký');
+INSERT INTO Categories (Name) VALUES ('Tiểu thuyết');
+INSERT INTO Categories (Name) VALUES ('Truyện ngắn – Tản văn – Tạp văn');
+INSERT INTO Categories (Name) VALUES ('Văn học tuổi mới lớn');
+INSERT INTO Categories (Name) VALUES ('Truyện trinh thám');
+
+-- Sách kiến thức tổng hợp
+INSERT INTO Categories (Name) VALUES ('Sách lịch sử, văn minh thế giới');
+INSERT INTO Categories (Name) VALUES ('Sách địa lý, chính trị');
+INSERT INTO Categories (Name) VALUES ('Sách danh nhân, doanh nhân');
+INSERT INTO Categories (Name) VALUES ('Sách tôn giáo, tâm linh');
+INSERT INTO Categories (Name) VALUES ('Sách kinh tế học');
+INSERT INTO Categories (Name) VALUES ('Sách y học, dinh dưỡng');
+
+
+SET FOREIGN_KEY_CHECKS = 0;
+TRUNCATE TABLE Roles;
+SET FOREIGN_KEY_CHECKS = 1;
+
+SET FOREIGN_KEY_CHECKS = 0;
+TRUNCATE TABLE Rentals;
+SET FOREIGN_KEY_CHECKS = 1;
+
+
+INSERT INTO Books 
+(Title, CategoryId, AuthorId, ISBN, PublishedYear, Summary, CoverImage, RentalPrice, ReadingDuration, Views, Status)
+VALUES 
+('Flow – Mihaly Csikszentmihalyi ', 1, 1, '9781234567890', 2020, 'Khái niệm, lý thuyết Flow được xem như trụ cột trong tâm lý học tích cực, vẫn đang được tiếp tục nghiên cứu và áp dụng trong hầu hết các ngành Khoa học Xã hội, Kinh tế, thậm chí trong nghiên cứu sự tiến hóa của nhân loại, và các lĩnh vực đời sống khác nhau, nhằm cải thiện chất lượng cuộc sống, bao gồm cả tâm lý trị liệu, cải tạo tội phạm vị thành niên, giáo dục, âm nhạc,…', '~/assets/images/courses/uploads/2023/05/flow-dong-chay-mihaly.jpg', '5,000 VNĐ', '1h0m', 100, 'Đã hoàn thành');
+
+INSERT INTO Books 
+(Title, CategoryId, AuthorId, ISBN, PublishedYear, Summary, CoverImage, RentalPrice, ReadingDuration, Views, Status)
+VALUES 
+('Đời Ngắn Đừng Ngủ Dài – Robin Sharma', 1, 2, '9780987654321', 2019, 'Đời ngắn đừng ngủ dài, khi đọc tựa đề của cuốn sách này mình thầm nghĩ chắc là tác giả nói đến vấn đề của những người mê ngủ. Nhưng khi đọc nội dung thì tác giả chẳng hề nói gì đến việc ngủ, mà tác giả dùng từ “ngủ dài” ở đây là để ám chỉ cho những người còn vô định trong cuộc sống, những người chưa trả lời được câu hỏi “tôi là ai”.', '~/assets/images/courses/uploads/2023/05/doi-ngan-dung-ngu-dai-robin-sharma.jpg', '7,000 VNĐ', '2h15m', 250, 'Đang cập nhật');
+
+INSERT INTO Books 
+(Title, CategoryId, AuthorId, ISBN, PublishedYear, Summary, CoverImage, RentalPrice, ReadingDuration, Views, Status)
+VALUES 
+('Vị Tu Sĩ Bán Chiếc Ferrari – Robin Sharma', 1, 5, '9788276374824', 2014, 'Trong vô vàn những cuốn sách trên kệ sách của nhà sách, tôi ấn tượng với cuốn sách trên bởi màu sắc bìa sách nhẹ nhàng, tên cuốn sách đặt luôn cho tôi câu hỏi “Vị tu sĩ BÁN…?” Tu sĩ đi bán một cái gì đó à? sao lạ quá, tôi tiện google tra luôn Ferrari – chiếc xe khá đẹp và thuộc hàng đắt của xịn. Vậy là tôi cầm lên đọc thử.', '~/assets/images/courses/uploads/2022/12/vi-tu-si-ban-chiec-ferrari-robin-sharma.jpg', '3,000 VNĐ', '1h35m', 424, 'Đã hoàn thành');
+

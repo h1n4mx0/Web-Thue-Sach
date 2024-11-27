@@ -1,0 +1,73 @@
+@model LibraryManager.Areas.Admin.Models.CreateViewModel
+
+
+<h2>Tạo Sách Mới</h2>
+
+<form asp-action="Create" enctype="multipart/form-data" method="post">
+    <div class="form-group">
+        <label asp-for="Title"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+    
+    <div class="form-group">
+        <label asp-for="AuthorId"></label>
+        <select asp-for="AuthorId" class="form-control" asp-items="@(new SelectList(ViewBag.Authors, "Id", "Name"))"></select>
+        <span asp-validation-for="AuthorId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CategoryId"></label>
+        <select asp-for="CategoryId" class="form-control" asp-items="@(new SelectList(ViewBag.Categories, "Id", "Name"))"></select>
+        <span asp-validation-for="CategoryId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ISBN"></label>
+        <input asp-for="ISBN" class="form-control" />
+        <span asp-validation-for="ISBN" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="PublishedYear"></label>
+        <input asp-for="PublishedYear" class="form-control" />
+        <span asp-validation-for="PublishedYear" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Summary"></label>
+        <textarea asp-for="Summary" class="form-control"></textarea>
+        <span asp-validation-for="Summary" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CoverImage"></label>
+        <input asp-for="CoverImage" type="file" class="form-control" />
+        <span asp-validation-for="CoverImage" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="RentalPrice"></label>
+        <div class="input-group">
+            <input asp-for="RentalPrice" class="form-control" id="RentalPrice" />
+            <span class="input-group-text">VNĐ</span>
+        </div>
+        <span asp-validation-for="RentalPrice" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ReadingDuration"></label>
+        <input asp-for="ReadingDuration" class="form-control" />
+        <span asp-validation-for="ReadingDuration" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Status"></label>
+        <select asp-for="Status" class="form-control">
+            <option value="Đã hoàn thành">Đã hoàn thành</option>
+            <option value="Đang cập nhật">Đang cập nhật</option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Tạo Sách</button>
+</form>

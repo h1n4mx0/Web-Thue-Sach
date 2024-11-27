@@ -1,0 +1,32 @@
+1. Các Nghiệp Vụ Chính
+a. Người dùng thông thường (User)
+
+    Chức năng:
+        Đăng ký, đăng nhập, cập nhật thông tin cá nhân.
+        Xem và tìm kiếm sách.
+        Thuê sách.
+        Xem lịch sử thuê sách.
+        Trả sách.
+        Viết đánh giá và bình luận sách.
+
+b. Quản trị viên (Admin)
+
+    Chức năng:
+        Quản lý tài khoản người dùng:
+            Xem danh sách người dùng.
+            Khóa/mở khóa tài khoản.
+        Quản lý sách:
+            Thêm, sửa, xóa sách.
+            Quản lý danh mục sách, tác giả.
+        Quản lý thuê sách:
+            Xem danh sách thuê sách.
+            Xác nhận, kiểm tra trả sách.
+        Quản lý đánh giá:
+            Xóa hoặc ẩn các bình luận vi phạm.
+
+c. Quản lý (Manager)
+
+    Chức năng:
+        Quản lý sách (thêm/sửa/xóa).
+        Quản lý thuê sách (giám sát, theo dõi).
+        Xem các báo cáo về sách và doanh thu.

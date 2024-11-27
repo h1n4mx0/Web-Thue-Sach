@@ -1,0 +1,155 @@
+@{
+    ViewData["Title"] = "Thể loại";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="~/assets/images/favicon.png">
+    <!-- Bootstarp min css -->
+    <link rel="stylesheet" href="~/assets/css/bootstrap.min.css">
+    <!-- Mean menu css -->
+    <link rel="stylesheet" href="~/assets/css/meanmenu.css">
+    <!-- All min css -->
+    <link rel="stylesheet" href="~/assets/css/all.min.css">
+    <!-- Swiper bundle min css -->
+    <link rel="stylesheet" href="~/assets/css/swiper-bundle.min.css">
+    <!-- Magnigic popup css -->
+    <link rel="stylesheet" href="~/assets/css/magnific-popup.css">
+    <!-- Animate css -->
+    <link rel="stylesheet" href="~/assets/css/animate.css">
+    <!-- Nice select css -->
+    <link rel="stylesheet" href="~/assets/css/nice-select.css">
+    <!-- Style css -->
+    <link rel="stylesheet" href="~/assets/css/style.css">
+</head>
+
+<body>
+
+    <main>
+        <section class="banner-inner-area sub-bg bg-image" data-background="~/assets/images/bg/banner-inner-bg.png">
+            <div class="banner-inner__shape1">
+                <img class="animation__sunMove" src="~/assets/images/shape/banner-inner-shape1.png" alt="image">
+            </div>
+            <div class="banner-inner__shape2">
+                <img src="~/assets/images/shape/banner-inner-shape2.png" alt="image">
+            </div>
+            <div class="banner-inner__shape3">
+                <img class="animation__arryLeftRight" src="~/assets/images/shape/banner-inner-shape3.png" alt="image">
+            </div>
+            <div class="banner-inner__shape4">
+                <img class="animation__arryUpDown" src="~/assets/images/shape/banner-inner-shape4.png" alt="image">
+            </div>
+            <div class="banner-inner__shape5">
+                <img src="~/assets/images/shape/banner-inner-shape5.png" alt="image">
+            </div>
+            <div class="banner-inner__circle">
+                <img class="slide-effect1" src="~/assets/images/shape/banner-inner-circle.png" alt="image">
+            </div>
+            <div class="banner-inner__circle2">
+                <img class="slide-effect2" src="~/assets/images/shape/banner-inner-circle2.png" alt="image">
+            </div>
+            <div class="banner-inner__dots">
+                <img class="pxl-image-zoom" src="~/assets/images/shape/banner-inner-dots.png" alt="image">
+            </div>
+            <div class="container">
+                <div class="banner-inner__content">
+
+                    <h1>
+                        Thể loại: @ViewBag.CategoryName
+                    </h1>
+                    <ul>
+                        <li><a href="@Url.Action("Index", "Home")">Trang chủ</a></li>
+                        <li><i class="fa-regular fa-angle-right"></i></li>
+                        <li>@ViewBag.CategoryName</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        <!-- Banner area end here -->
+
+        <!-- Courses area start here -->
+        <section class="courses-area pt-120 pb-120">
+            <div class="container">
+                <div class="row g-4">
+                @if (ViewBag.Books != null && ((List<LibraryManager.Models.Books>)ViewBag.Books).Count > 0)
+                {
+                    foreach (var book in (List<LibraryManager.Models.Books>)ViewBag.Books)
+                    {
+                        <div class="col-xl-4 col-md-6">
+                            <div class="courses-two__item">
+                                <div class="courses-two__image image">
+                                    <!-- Hiển thị ảnh bìa của sách -->
+                                    <img src="@Url.Content(book.CoverImage)" alt="@book.Title">
+                                    <span class="time">
+                                        <svg class="me-1" width="16" height="17" viewBox="0 0 16 17" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M10.8505 9.91291L8.61967 8.23979V4.8316C8.61967 4.48891 8.34266 4.21191 7.99998 4.21191C7.65729 4.21191 7.38029 4.48891 7.38029 4.8316V8.54966C7.38029 8.74485 7.47201 8.92892 7.62817 9.04541L10.1069 10.9044C10.2138 10.985 10.3441 11.0285 10.478 11.0284C10.667 11.0284 10.8529 10.9435 10.9744 10.7799C11.1802 10.5066 11.1244 10.118 10.8505 9.91291Z"
+                                                fill="white" />
+                                            <path
+                                                d="M8 0.5C3.58853 0.5 0 4.08853 0 8.5C0 12.9115 3.58853 16.5 8 16.5C12.4115 16.5 16 12.9115 16 8.5C16 4.08853 12.4115 0.5 8 0.5ZM8 15.2607C4.27266 15.2607 1.23934 12.2273 1.23934 8.5C1.23934 4.77266 4.27266 1.73934 8 1.73934C11.728 1.73934 14.7607 4.77266 14.7607 8.5C14.7607 12.2273 11.7273 15.2607 8 15.2607Z"
+                                                fill="white" />
+                                        </svg>
+                                        @book.ReadingDuration
+                                    </span>
+                                </div>
+                                <div class="courses__content pt-4 p-0">
+                                    <div class="courses-two__info pb-4">
+                                        <a href="#">@book.Category?.Name</a>
+                                        <h4>@book.RentalPrice</h4> <!-- Có thể thay thế giá nếu cần -->
+                                    </div>
+                                    <!-- Tiêu đề của sách -->
+                                    <h3><a href="@Url.Action("BookDetail", "Home", new { id = book.Id })" class="primary-hover">@book.Title</a></h3>
+                                    <ul class="d-flex align-items-center gap-4 my-3">
+                                        <li>
+                                            <svg class="me-1" width="16" height="14" viewBox="0 0 16 14" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                            </svg>
+                                            <a class="primary-hover fs-14" href="#0">@book.Views Lượt thuê</a>
+                                        </li>
+                                        <li>
+                                            <svg class="me-1" width="14" height="16" viewBox="0 0 14 16" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                            </svg>
+                                            <a class="primary-hover fs-14" href="#0">@book.Status</a>
+                                        </li>
+                                    </ul>
+                                    <div class="bor-top pt-3 d-flex align-items-center justify-content-between gap-3">
+                                        <div class="d-flex gap-2 align-items-center">
+                                            <img src="~/assets/images/courses/courses-user1.jpg" alt="image">
+                                            <!-- Tên tác giả của sách -->
+                                            <a href="#0" class="primary-hover">@book.Author?.Name</a>
+                                        </div>
+                                        <div class="star">
+                                            <i class="fa-sharp fa-solid fa-star"></i>
+                                            <i class="fa-sharp fa-solid fa-star"></i>
+                                            <i class="fa-sharp fa-solid fa-star"></i>
+                                            <i class="fa-sharp fa-solid fa-star"></i>
+                                            <i class="fa-sharp fa-solid fa-star disabled"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p>Không có sách nào trong thể loại này.</p>
+                }   
+
+                </div>
+            </div>
+            <div class="pegi justify-content-center mt-60">
+                <a href="#0" class="border-none"><i class="fa-regular fa-arrow-left primary-color transition"></i></a>
+                <a href="#0">01</a>
+                <a href="#0" class="active">02</a>
+                <a href="#0">03</a>
+                <a href="#0" class="border-none"><i class="fa-regular fa-arrow-right primary-color transition"></i></a>
+            </div>
+        </section>
+    </main>
+
+</body>

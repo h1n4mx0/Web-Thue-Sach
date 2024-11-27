@@ -1,0 +1,80 @@
+@model LibraryManager.Areas.Admin.Models.EditViewModel
+
+<h2>Chỉnh sửa Sách</h2>
+
+<form asp-action="Edit" enctype="multipart/form-data" method="post">
+    <input type="hidden" asp-for="Id" />
+    
+    <div class="form-group">
+        <label asp-for="Title"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+    
+    <div class="form-group">
+        <label asp-for="AuthorId"></label>
+        <select asp-for="AuthorId" class="form-control" asp-items="@(new SelectList(ViewBag.Authors, "Id", "Name", Model.AuthorId))"></select>
+        <span asp-validation-for="AuthorId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CategoryId"></label>
+        <select asp-for="CategoryId" class="form-control" asp-items="@(new SelectList(ViewBag.Categories, "Id", "Name", Model.CategoryId))"></select>
+        <span asp-validation-for="CategoryId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ISBN"></label>
+        <input asp-for="ISBN" class="form-control" />
+        <span asp-validation-for="ISBN" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="PublishedYear"></label>
+        <input asp-for="PublishedYear" class="form-control" />
+        <span asp-validation-for="PublishedYear" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Summary"></label>
+        <textarea asp-for="Summary" class="form-control"></textarea>
+        <span asp-validation-for="Summary" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CoverImage"></label>
+        <input asp-for="CoverImage" type="file" class="form-control" />
+        <span asp-validation-for="CoverImage" class="text-danger"></span>
+        @if (!string.IsNullOrEmpty(Model.CoverImage))
+        {
+            <div class="mt-2">
+                <img src="@Model.CoverImage" alt="Book Cover" style="max-width: 200px;" />
+            </div>
+        }
+    </div>
+
+    <div class="form-group">
+        <label asp-for="RentalPrice"></label>
+        <div class="input-group">
+            <input asp-for="RentalPrice" class="form-control" id="RentalPrice" />
+            <span class="input-group-text">VNĐ</span>
+        </div>
+        <span asp-validation-for="RentalPrice" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ReadingDuration"></label>
+        <input asp-for="ReadingDuration" class="form-control" />
+        <span asp-validation-for="ReadingDuration" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Status"></label>
+        <select asp-for="Status" class="form-control">
+            <option value="Đã hoàn thành">Đã hoàn thành</option>
+            <option value="Đang cập nhật">Đang cập nhật</option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Lưu Thay Đổi</button>
+</form>
