@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "FuV7QzypAdy1gM5lwTg+D45CnWMDwVzXDSBxb4RQtQY=",
+  "Hash": "L1U56l+0ozmg2VH/Tdo++Hc+YC18wWWG6ORkUmTTt1I=",
   "Source": "LibraryManager",
   "BasePath": "_content/LibraryManager",
   "Mode": "Default",
@@ -29505,6 +29505,25 @@
       "OriginalItemSpec": "wwwroot/assets/webfonts/SFProDisplay-UltralightItalic.woff2"
     },
     {
+      "Identity": "/home/h1n4m/Desktop/CNWeb/LibraryManager/wwwroot/bookImages/3f3fb14e-3689-4b94-a675-d131fe4ae8b2.png",
+      "SourceId": "LibraryManager",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/h1n4m/Desktop/CNWeb/LibraryManager/wwwroot/",
+      "BasePath": "_content/LibraryManager",
+      "RelativePath": "bookImages/3f3fb14e-3689-4b94-a675-d131fe4ae8b2.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/bookImages/3f3fb14e-3689-4b94-a675-d131fe4ae8b2.png"
+    },
+    {
       "Identity": "/home/h1n4m/Desktop/CNWeb/LibraryManager/wwwroot/bookImages/813da12e-24ae-4c89-ab59-be778cef3196.jpg",
       "SourceId": "LibraryManager",
       "SourceType": "Discovered",
@@ -29522,6 +29541,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/bookImages/813da12e-24ae-4c89-ab59-be778cef3196.jpg"
+    },
+    {
+      "Identity": "/home/h1n4m/Desktop/CNWeb/LibraryManager/wwwroot/bookImages/8f5df120-f82f-4ff1-aca2-6927ef219389.png",
+      "SourceId": "LibraryManager",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/h1n4m/Desktop/CNWeb/LibraryManager/wwwroot/",
+      "BasePath": "_content/LibraryManager",
+      "RelativePath": "bookImages/8f5df120-f82f-4ff1-aca2-6927ef219389.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/bookImages/8f5df120-f82f-4ff1-aca2-6927ef219389.png"
     },
     {
       "Identity": "/home/h1n4m/Desktop/CNWeb/LibraryManager/wwwroot/bookImages/bebc9a2c-4726-4a08-86ab-ce6b9b2aca52.jpg",

@@ -59,7 +59,6 @@ namespace LibraryManager.Areas.Admin.Controllers
                     PageNumber = page,
                     PageSize = pageSize
                 };
-                Console.WriteLine($"Model type: {pagedResult.GetType()}"); 
                 return View(pagedResult); 
             }
             catch (Exception ex)
@@ -86,6 +85,7 @@ namespace LibraryManager.Areas.Admin.Controllers
         {
             if (!ModelState.IsValid)
             {
+
                 ViewBag.Authors = _db.Authors.ToList();
                 ViewBag.Categories = _db.Categories.ToList();
                 return View(model);
@@ -133,62 +133,158 @@ namespace LibraryManager.Areas.Admin.Controllers
         }
 
 
-        // GET: Books/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-                return NotFound();
-
-            var book = await _db.Books.FindAsync(id);
-
-            if (book == null)
-                return NotFound();
-
-            ViewBag.Categories = _db.Categories.ToList();
-            ViewBag.Authors = _db.Authors.ToList();
-            return View(book);
-        }
-
-        // POST: Books/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Books book, IFormFile coverImage)
+        public async Task<IActionResult> Edit(int id, EditViewModel model)
         {
-            if (id != book.Id)
-                return NotFound();
-
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                try
-                {
-                    if (coverImage != null)
-                    {
-                        string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
-                        string uniqueFileName = Guid.NewGuid().ToString() + "_" + coverImage.FileName;
-                        string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                        using (var fileStream = new FileStream(filePath, FileMode.Create))
-                        {
-                            await coverImage.CopyToAsync(fileStream);
-                        }
-                        book.CoverImage = "/images/" + uniqueFileName;
-                    }
-
-                    _db.Update(book);
-                    await _db.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!BookExists(book.Id))
-                        return NotFound();
-                    else
-                        throw;
-                }
-                return RedirectToAction(nameof(Index));
+                ViewBag.Authors = _db.Authors.ToList();
+                ViewBag.Categories = _db.Categories.ToList();
+                return View(model);
             }
 
-            ViewBag.Categories = _db.Categories.ToList();
+            var book = await _db.Books.FindAsync(id);
+            if (book == null)
+            {
+                return NotFound();
+            }
+            // Xử lý giá thuê
+            if (int.TryParse(model.RentalPrice, out int rentalPrice))
+            {
+                book.RentalPrice = $"{rentalPrice:N0} VNĐ";
+            }
+            else
+            {
+                ModelState.AddModelError("RentalPrice", "Giá thuê phải là số hợp lệ.");
+                ViewBag.Authors = _db.Authors.ToList();
+                ViewBag.Categories = _db.Categories.ToList();
+                return View(model);
+            }
+
+
+            // Map các trường cơ bản từ ViewModel sang Book
+            book.Title = model.Title;
+            book.AuthorId = model.AuthorId;
+            book.CategoryId = model.CategoryId;
+            book.ISBN = model.ISBN;
+            book.PublishedYear = model.PublishedYear;
+            book.Summary = model.Summary;
+            book.ReadingDuration = model.ReadingDuration;
+            book.Status = model.Status;
+
+            // Xử lý upload ảnh mới nếu có
+            if (model.CoverImage != null && model.CoverImage.Length > 0)
+            {
+                var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "bookImages");
+                if (!Directory.Exists(uploadsFolder))
+                {
+                    Directory.CreateDirectory(uploadsFolder);
+                }
+
+                // Xóa ảnh cũ nếu có
+                if (!string.IsNullOrEmpty(book.CoverImage))
+                {
+                    var oldImagePath = Path.Combine(_webHostEnvironment.WebRootPath, book.CoverImage.TrimStart('/'));
+                    if (System.IO.File.Exists(oldImagePath))
+                    {
+                        try
+                        {
+                            System.IO.File.Delete(oldImagePath);
+                        }
+                        catch
+                        {
+                            // Log lỗi nếu cần
+                        }
+                    }
+                }
+
+                // Lưu ảnh mới
+                string fileExtension = Path.GetExtension(model.CoverImage.FileName);
+                string uniqueFileName = $"{Guid.NewGuid()}{fileExtension}";
+                string relativePath = Path.Combine("bookImages", uniqueFileName);
+                string filePath = Path.Combine(_webHostEnvironment.WebRootPath, relativePath);
+
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await model.CoverImage.CopyToAsync(fileStream);
+                }
+
+                book.CoverImage = "/" + relativePath.Replace('\\', '/');
+            }
+            else
+            {
+                // Giữ nguyên ảnh cũ
+                book.CoverImage = model.OldCoverImage;
+            }
+
+            try
+            {
+                _db.Update(book);
+                await _db.SaveChangesAsync();
+                return RedirectToAction("Show");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "Có lỗi xảy ra khi cập nhật sách: " + ex.Message);
+                ViewBag.Authors = _db.Authors.ToList();
+                ViewBag.Categories = _db.Categories.ToList();
+                return View(model);
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var book = await _db.Books.FindAsync(id);
+            if (book == null)
+            {
+                return NotFound();
+            }
+
+            var model = new EditViewModel
+            {
+                Id = book.Id,
+                Title = book.Title,
+                AuthorId = book.AuthorId,
+                CategoryId = book.CategoryId,
+                ISBN = book.ISBN,
+                OldCoverImage = book.CoverImage,  // Lưu đường dẫn ảnh hiện tại
+                PublishedYear = book.PublishedYear,
+                Summary = book.Summary,
+                RentalPrice = book.RentalPrice,
+                ReadingDuration = book.ReadingDuration,
+                Status = book.Status
+            };
+
             ViewBag.Authors = _db.Authors.ToList();
-            return View(book);
+            ViewBag.Categories = _db.Categories.ToList();
+            return View(model);
+        }
+
+
+        private async Task<string> SaveFileAsync(IFormFile file)
+        {
+            if (file == null) return null;
+
+            var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "books");
+            if (!Directory.Exists(uploadPath))
+                Directory.CreateDirectory(uploadPath);
+
+            var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+            var filePath = Path.Combine(uploadPath, fileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            return "/uploads/books/" + fileName;
+        }
+
+        private bool BookExists(int id)
+        {
+            return  _db.Books.Any(e => e.Id == id);
         }
 
         [HttpPost]
@@ -217,11 +313,6 @@ namespace LibraryManager.Areas.Admin.Controllers
             return RedirectToAction("Show"); 
         }
 
-
-        private bool BookExists(int id)
-        {
-            return _db.Books.Any(e => e.Id == id);
-        }
 
         // Advanced Search Action
         public async Task<IActionResult> AdvancedSearch(string query, int page = 1, int pageSize = 5)

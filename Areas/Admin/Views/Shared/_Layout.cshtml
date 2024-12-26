@@ -258,7 +258,8 @@
     <script src="~/admin/assets/js/jquery.cookie.js"></script>
     <!-- endinject -->
     <!-- Custom js for this page -->
-    <script src="~/admin/assets/js/dashboard.js"></script>
+    
+    
     <script src="~/admin/assets/js/file-upload.js"></script>
     <script src="~/admin/assets/js/typeahead.js"></script>
     <script src="~/admin/assets/js/select2.js"></script>
@@ -267,5 +268,5 @@
     <!-- Bootstrap JS -->
     <script src="~/admin/assets/js/bootstrap.bundle.min.js"></script>
 
-    <!-- End custom js for this page -->
+    @await RenderSectionAsync("Scripts", required: false)
 </body>

@@ -6205,8 +6205,16 @@
       "PackagePath": "staticwebassets/assets/webfonts/fa-v4compatibility.woff2"
     },
     {
+      "Id": "/home/h1n4m/Desktop/CNWeb/LibraryManager/wwwroot/bookImages/3f3fb14e-3689-4b94-a675-d131fe4ae8b2.png",
+      "PackagePath": "staticwebassets/bookImages/3f3fb14e-3689-4b94-a675-d131fe4ae8b2.png"
+    },
+    {
       "Id": "/home/h1n4m/Desktop/CNWeb/LibraryManager/wwwroot/bookImages/813da12e-24ae-4c89-ab59-be778cef3196.jpg",
       "PackagePath": "staticwebassets/bookImages/813da12e-24ae-4c89-ab59-be778cef3196.jpg"
+    },
+    {
+      "Id": "/home/h1n4m/Desktop/CNWeb/LibraryManager/wwwroot/bookImages/8f5df120-f82f-4ff1-aca2-6927ef219389.png",
+      "PackagePath": "staticwebassets/bookImages/8f5df120-f82f-4ff1-aca2-6927ef219389.png"
     },
     {
       "Id": "/home/h1n4m/Desktop/CNWeb/LibraryManager/wwwroot/bookImages/bebc9a2c-4726-4a08-86ab-ce6b9b2aca52.jpg",

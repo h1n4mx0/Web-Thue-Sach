@@ -74,7 +74,7 @@
                     </td>
                     <td>@book.RentalPrice</td>
                     <td class="d-flex justify-content-start">
-                        <form asp-action="Edit" asp-route-id="@book.Id" method="post" class="me-1"> 
+                        <form asp-action="Edit" asp-route-id="@book.Id" method="get" class="me-1"> 
                             <button type="submit" class="btn btn-gradient-dark btn-icon-text btn-rounded"><i class="mdi mdi-table-edit btn-icon-prepend"></i>Sửa</button>
                         </form>
                         <form asp-action="Delete" asp-route-id="@book.Id" method="post" onsubmit="return confirm('Bạn có chắc chắn muốn xóa sách này?');">

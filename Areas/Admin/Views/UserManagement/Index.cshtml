@@ -11,11 +11,11 @@
 <table class="table">
     <thead>
         <tr>
-            <th>#</th>
-            <th>Username</th>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Actions</th>
+            <th scope="col" style="width: 5%">#</th>
+            <th scope="col" style="width: 20%">Username</th>
+            <th scope="col" style="width: 30%">Email</th>
+            <th scope="col" style="width: 15%">Quyền</th>
+            <th scope="col" style="width: 30%">Hành động</th>
         </tr>
     </thead>
     <tbody>
@@ -26,10 +26,32 @@
                 <td>@user.Id</td>
                 <td>@user.Username</td>
                 <td>@user.Email</td>
-                <td>@user.Role?.RoleName</td> 
                 <td>
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editRoleModal" data-user-id="@user.Id" data-user-name="@user.Username">
-                        Edit Role
+                    @if (user.Role?.RoleName == "Admin")
+                    {
+                        <span class="badge bg-danger">@user.Role?.RoleName</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-info">@user.Role?.RoleName</span>
+                    }
+                </td>
+                <td>
+                    <button type="button" 
+                            class="btn btn-primary btn-sm" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#editRoleModal" 
+                            data-user-id="@user.Id" 
+                            data-user-name="@user.Username">
+                        <i class="bi bi-pencil-square"></i> Đổi quyền
+                    </button>
+                    <button type="button" 
+                            class="btn btn-danger btn-sm ms-2" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#deleteUserModal" 
+                            data-user-id="@user.Id" 
+                            data-user-name="@user.Username">
+                        <i class="bi bi-trash"></i> Xóa
                     </button>
                 </td>
             </tr>
@@ -41,13 +63,13 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editRoleModalLabel">Edit Role for <span id="modalUserName"></span></h5>
+                <h5 class="modal-title" id="editRoleModalLabel">Thay đổi quyền cho <span id="modalUserName"></span></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form id="editRoleForm">
                     <div class="mb-3">
-                        <label for="role" class="form-label">Select New Role</label>
+                        <label for="role" class="form-label">Chọn quyền mới</label>
                         <select class="form-control" id="role" name="role">
                             @foreach (var role in ViewBag.Roles)
                             {
@@ -57,8 +79,8 @@
 
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Confirm</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Thoát</button>
+                        <button type="submit" class="btn btn-primary">Xác nhận</button>
                     </div>
                 </form>
             </div>
@@ -71,7 +93,7 @@
     <div id="successToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="d-flex">
             <div class="toast-body">
-                Role updated successfully!
+                Cập nhật quyền thành công!
             </div>
             <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
@@ -99,17 +121,21 @@
             var userId = document.getElementById('userId').value;
             var newRole = document.getElementById('role').value;
 
-            fetch(`/Admin/UserManagement/EditRole/userId=${encodeURIComponent(userId)}&roleId=${encodeURIComponent(newRole)}`, {
+            fetch(`/Admin/UserManagement/EditRole?userId=${encodeURIComponent(userId)}&roleId=${encodeURIComponent(newRole)}`, {
                 method: 'GET'             
             })
             .then(response => {
                 if (response.ok) {
-                    var modal = bootstrap.Modal.getInstance(editRoleModal);
-                    modal.hide();
+                    // Đóng modal
+                    $('#editRoleModal').modal('hide');
 
+                    // Hiện toast
                     var toastElement = document.getElementById('successToast');
                     var toast = new bootstrap.Toast(toastElement);
                     toast.show();
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 500);
                 } else {
                     alert('Failed to update role!');
                 }

@@ -30,32 +30,41 @@ namespace LibraryManager.Areas.Admin.Controllers
         
 
         [HttpGet]
-        [ValidateAntiForgeryToken] 
         public IActionResult EditRole(string userId, string roleId)
         {
-            Console.WriteLine("da vao day");
-            Console.WriteLine(userId);
-            
-            var user = _db.UserAccounts.FirstOrDefault(u => u.Id == int.Parse(userId));
-            if (user == null)
+            try 
             {
-                Console.WriteLine("User not found");
+                // Parse userId và roleId ngay từ đầu
+                int userIdInt = int.Parse(userId);
+                int roleIdInt = int.Parse(roleId);
+                Console.WriteLine(userIdInt);
+                Console.WriteLine(roleIdInt);
+                // Sử dụng giá trị đã parse
+                var user = _db.UserAccounts.FirstOrDefault(u => u.Id == userIdInt);
+                if (user == null)
+                {
+                    return Json(new { success = false, message = "User not found" });
+                }
+
+                var role = _db.Roles.FirstOrDefault(r => r.Id == roleIdInt);
+                if (role == null)
+                {
+                    return Json(new { success = false, message = "Role not found" });
+                }
+
+                user.RoleId = roleIdInt;
+                _db.SaveChanges();
+
                 return RedirectToAction("Index");
             }
-            Console.WriteLine(roleId);
-            var role = _db.Roles.FirstOrDefault(r => r.Id == int.Parse(roleId));
-            if (role == null)
+            catch (FormatException)
             {
-                Console.WriteLine("role not found");
-                return RedirectToAction("Index");
+                return Json(new { success = false, message = "Invalid user ID or role ID format" });
             }
-
-            user.RoleId = int.Parse(roleId);
-            _db.SaveChanges();
-
-            TempData["SuccessMessage"] = $"Vai trò của người dùng {user.Username} đã được thay đổi thành {role.RoleName}.";
-
-            return RedirectToAction("Index");
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "An error occurred: " + ex.Message });
+            }
         }
 
     }
