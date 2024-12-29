@@ -48,6 +48,7 @@
     <link rel="stylesheet" href="~/assets/css/nice-select.css">
     <!-- Style css -->
     <link rel="stylesheet" href="~/assets/css/style.css">
+   
 </head>
 
 <body>
@@ -170,32 +171,69 @@
                         </ul>
                     </nav>
                 </div>
-                <div class="d-flex align-items-center gap-4 gap-xl-5">
-                    <div class="menu-search">
-                        <input type="text" placeholder="Search here..">
-                        <button><i class="fa-regular fa-magnifying-glass"></i></button>
-                    </div>
-                    <div class="menu-btns d-none d-lg-flex">
-                        
+                <div class="d-flex align-items-center gap-4">
+                    <!-- Search and Dropdown -->
+                    <div class="d-flex align-items-center gap-3 menu-search">
+                        <form action="/Home/Search" method="get" class="d-flex align-items-center gap-3 w-100">
+                            <!-- Search Input -->
+                            <div class="input-group shadow-sm flex-grow-1">
+                                <input type="text" name="searchQuery" class="form-control rounded-pill ps-3" placeholder="Search here..." aria-label="Search" aria-describedby="search-addon">
+                                <button type="submit"><i class="fa-regular fa-magnifying-glass"></i></button>
+                            </div>
+                            
+                            <!-- Dropdown -->
+                            <div class="dropdown">
+    <i class="fa-solid fa-filter fs-4 text-success cursor-pointer" id="advancedDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;"></i>
 
+    <div class="dropdown-menu p-4 shadow-lg border-0 rounded" aria-labelledby="advancedDropdown" style="width: 600px;">
+        <h6 class="dropdown-header text-primary">Advanced Filters</h6>
+        
+        <!-- Checkbox Options -->
+        <div class="row mb-4">
+        
+                <div class="checkbox ">
+                    <input type="checkbox" id="author" name="author" value="true" class="icheck me-2">
+                    <label for="author">Tác giả</label>
+                </div>
+                <div class="checkbox">
+                    <input type="checkbox" id="category" name="category" value="true" class="icheck me-2">
+                    <label for="category">Thể loại</label>
+                </div>
+     
+        </div>
+
+        <!-- Price Range Slider -->
+        <div class="row">
+            <div class="col-12">
+                <h6 class="mb-3">Khoảng giá:</h6>
+                <div class="range-slider">
+                    <span class="rangeValues"></span><br>
+                    <input value="1950" min="1950" max="2024" step="50000" type="range">
+                    <input value="2024" min="1950" max="2024" step="50000" type="range">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+                        </form>
+                    </div>
+
+             
+                    <!-- User Buttons -->
+                    <div class="menu-btns d-flex gap-3">
                         @if (string.IsNullOrEmpty(username))
                         {
-                            <a class="active" href="/Account/Login">Đăng nhập</a>
-                            <a href="/Account/Register">Đăng ký</a>
+                            <a class="btn btn-primary" href="/Account/Login">Đăng nhập</a>
+                            <a class="btn btn-outline-primary" href="/Account/Register">Đăng ký</a>
                         }
                         else
                         {
-                            <a class=" menu-btns active">Xin chào, @username</a>
-                            <a href="/Account/Logout">Đăng xuất</a> 
+                            <span class="d-flex align-items-center">Xin chào, <strong>@username</strong></span>
+                            <a class="btn btn-danger" href="/Account/Logout">Đăng xuất</a>
                         }
                     </div>
                 </div>
-                <button class="menubars d-block d-lg-none" type="button" data-bs-toggle="offcanvas"
-                    data-bs-target="#menubar">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
+            
             </div>
         </div>
     </header>
@@ -304,6 +342,7 @@
     <script src="~/assets/js/jquery-3.7.1.min.js"></script>
     <!-- Bootstrap min Js -->
     <script src="~/assets/js/bootstrap.min.js"></script>
+    <script src="~/assets/js/bootstrap.bundle.min.js"></script>
     <!-- Mean menu Js -->
     <script src="~/assets/js/meanmenu.js"></script>
     <!-- Swiper bundle min Js -->
@@ -322,5 +361,37 @@
     <script src="~/assets/js/jquery.waypoints.js"></script>
     <!-- Script Js -->
     <script src="~/assets/js/script.js"></script>
+    <script>function getVals(){
+  // Get slider values
+  let parent = this.parentNode;
+  let slides = parent.getElementsByTagName("input");
+  let slide1 = parseFloat( slides[0].value );
+  let slide2 = parseFloat( slides[1].value );
+  
+  // Neither slider will clip the other, so make sure we determine which is larger
+  if( slide1 > slide2 ){ let tmp = slide2; slide2 = slide1; slide1 = tmp; }
+  
+  let displayElement = parent.getElementsByClassName("rangeValues")[0];
+  displayElement.innerHTML = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(slide1) + " - " + 
+                            new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(slide2);
+}
+
+window.onload = function(){
+  // Initialize Sliders
+  let sliderSections = document.getElementsByClassName("range-slider");
+  for( let x = 0; x < sliderSections.length; x++ ){
+    let sliders = sliderSections[x].getElementsByTagName("input");
+    for( let y = 0; y < sliders.length; y++ ){
+      if( sliders[y].type ==="range" ){
+        sliders[y].oninput = getVals;
+        // Manually trigger event first time to display values
+        sliders[y].oninput();
+      }
+    }
+  }
+}
+</script>
+
+    
 </body>
 </html>

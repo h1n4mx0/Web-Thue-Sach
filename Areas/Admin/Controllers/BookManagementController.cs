@@ -83,35 +83,59 @@ namespace LibraryManager.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateViewModel model)
         {
+            // Kiểm tra ModelState
             if (!ModelState.IsValid)
             {
+                TempData["ToastMessage"] = "Dữ liệu không hợp lệ. Vui lòng kiểm tra lại.";
+                TempData["ToastType"] = "error";
 
                 ViewBag.Authors = _db.Authors.ToList();
                 ViewBag.Categories = _db.Categories.ToList();
                 return View(model);
             }
+
+            // Kiểm tra và định dạng giá thuê
             if (int.TryParse(model.RentalPrice, out int rentalPrice))
             {
-                model.RentalPrice = $"{rentalPrice:N0} VNĐ"; 
+                model.RentalPrice = $"{rentalPrice:N0} VNĐ"; // Định dạng giá thuê
             }
             else
             {
-                ModelState.AddModelError("RentalPrice", "Giá thuê phải là số hợp lệ.");
+                TempData["ToastMessage"] = "Giá thuê phải là số hợp lệ.";
+                TempData["ToastType"] = "error";
+
+                ViewBag.Authors = _db.Authors.ToList();
+                ViewBag.Categories = _db.Categories.ToList();
                 return View(model);
             }
+
+            // Xử lý upload ảnh bìa
             string fileName = null;
-            if (model.CoverImage != null && model.CoverImage.Length > 0)
+            try
             {
-                var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "bookImages");
-                fileName = Guid.NewGuid().ToString() + Path.GetExtension(model.CoverImage.FileName);
-                var filePath = Path.Combine(uploadsFolder, fileName);
-                
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                if (model.CoverImage != null && model.CoverImage.Length > 0)
                 {
-                    await model.CoverImage.CopyToAsync(fileStream);
+                    var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "bookImages");
+                    fileName = Guid.NewGuid().ToString() + Path.GetExtension(model.CoverImage.FileName);
+                    var filePath = Path.Combine(uploadsFolder, fileName);
+
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await model.CoverImage.CopyToAsync(fileStream);
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                TempData["ToastMessage"] = "Không thể tải ảnh bìa. Vui lòng thử lại.";
+                TempData["ToastType"] = "error";
 
+                ViewBag.Authors = _db.Authors.ToList();
+                ViewBag.Categories = _db.Categories.ToList();
+                return View(model);
+            }
+
+            // Tạo đối tượng sách mới
             var book = new Books
             {
                 Title = model.Title,
@@ -120,15 +144,32 @@ namespace LibraryManager.Areas.Admin.Controllers
                 ISBN = model.ISBN,
                 PublishedYear = model.PublishedYear,
                 Summary = model.Summary,
-                CoverImage = "~/bookImages/" + fileName,
+                CoverImage = fileName != null ? "~/bookImages/" + fileName : null,
                 RentalPrice = model.RentalPrice,
                 ReadingDuration = model.ReadingDuration,
                 Status = model.Status,
-                Views = 0 // Giá trị mặc định
+                Views = 0
             };
 
-            _db.Books.Add(book);
-            await _db.SaveChangesAsync();
+            try
+            {
+                // Lưu vào cơ sở dữ liệu
+                _db.Books.Add(book);
+                await _db.SaveChangesAsync();
+
+                TempData["ToastMessage"] = "Thêm sách mới thành công!";
+                TempData["ToastType"] = "success";
+            }
+            catch (Exception ex)
+            {
+                TempData["ToastMessage"] = "Đã xảy ra lỗi trong quá trình lưu sách. Vui lòng thử lại.";
+                TempData["ToastType"] = "error";
+
+                ViewBag.Authors = _db.Authors.ToList();
+                ViewBag.Categories = _db.Categories.ToList();
+                return View(model);
+            }
+
             return RedirectToAction("Show");
         }
 
@@ -262,6 +303,10 @@ namespace LibraryManager.Areas.Admin.Controllers
             return View(model);
         }
 
+        public IActionResult Detail(int id) 
+        {            
+            return View();
+        }
 
         private async Task<string> SaveFileAsync(IFormFile file)
         {
@@ -291,14 +336,18 @@ namespace LibraryManager.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Delete(int id)
         {
-            Console.WriteLine("da vao day");
-            var book = _db.Books.Find(id); 
+            var book = _db.Books.Find(id);
 
             if (book != null)
             {
+                var relatedContents = _db.BookContents.Where(bc => bc.BookId == id).ToList();
+                if (relatedContents.Any())
+                {
+                    _db.BookContents.RemoveRange(relatedContents);
+                }
                 if (!string.IsNullOrEmpty(book.CoverImage))
                 {
-                    string imagePath = Path.Combine(_webHostEnvironment.WebRootPath, book.CoverImage.TrimStart('~','/'));
+                    string imagePath = Path.Combine(_webHostEnvironment.WebRootPath, book.CoverImage.TrimStart('~', '/'));
                     Console.WriteLine(imagePath);
                     if (System.IO.File.Exists(imagePath))
                     {
@@ -306,12 +355,71 @@ namespace LibraryManager.Areas.Admin.Controllers
                     }
                 }
 
-                _db.Books.Remove(book); 
-                _db.SaveChanges(); 
+                _db.Books.Remove(book);
+                _db.SaveChanges();
+
+                TempData["ToastMessage"] = "Xóa sách thành công!";
+                TempData["ToastType"] = "success"; 
+            }
+            else
+            {
+                TempData["ToastMessage"] = "Sách không tồn tại!";
+                TempData["ToastType"] = "error";
             }
 
-            return RedirectToAction("Show"); 
+            return RedirectToAction("Show");
         }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteMultiple(List<int> bookIds)
+        {
+            if (bookIds == null || bookIds.Count == 0)
+            {
+                TempData["ToastMessage"] = "Không có sách nào được chọn để xóa!";
+                TempData["ToastType"] = "warning"; // Loại thông báo: success, error, warning
+                return RedirectToAction("Show");
+            }
+
+            int deletedCount = 0;
+
+            foreach (var id in bookIds)
+            {
+                var book = _db.Books.Find(id);
+
+                if (book != null)
+                {
+                    if (!string.IsNullOrEmpty(book.CoverImage))
+                    {
+                        string imagePath = Path.Combine(_webHostEnvironment.WebRootPath, book.CoverImage.TrimStart('~', '/'));
+                        if (System.IO.File.Exists(imagePath))
+                        {
+                            System.IO.File.Delete(imagePath);
+                        }
+                    }
+
+                    _db.Books.Remove(book);
+                    deletedCount++;
+                }
+            }
+
+            _db.SaveChanges();
+
+            if (deletedCount > 0)
+            {
+                TempData["ToastMessage"] = $"Đã xóa thành công {deletedCount} sách!";
+                TempData["ToastType"] = "success";
+            }
+            else
+            {
+                TempData["ToastMessage"] = "Không có sách nào được xóa!";
+                TempData["ToastType"] = "error";
+            }
+
+            return RedirectToAction("Show");
+        }
+
 
 
         // Advanced Search Action

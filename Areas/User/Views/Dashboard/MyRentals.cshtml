@@ -1,0 +1,84 @@
+@{
+    Layout = "~/Areas/User/Views/Shared/_SideBarLayout.cshtml";
+}
+
+<div class="col-lg-9 col-md-12">
+    <div class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white u-s-m-b-30">
+        <div class="dash__pad-2">
+            <h1 class="dash__h1 u-s-m-b-14">Đơn Sách</h1>
+
+            <span class="dash__text u-s-m-b-30">Tra cứu lại các đơn sách bạn đã thuê.</span>
+            <form class="m-order u-s-m-b-30" asp-action="MyRentals" method="get">
+                <div class="m-order__select-wrapper">
+                    <label class="u-s-m-r-8" for="my-order-sort">Show:</label>
+                    <select class="select-box select-box--primary-style" id="my-order-sort">
+                        <option selected value="last5">Last 5 orders</option>
+                        <option value="last15days">Last 15 days</option>
+                        <option value="last30days">Last 30 days</option>
+                        <option value="last6months">Last 6 months</option>
+                        <option value="year2018">Orders placed in 2018</option>
+                        <option value="all">All Orders</option>
+                    </select>
+                </div>
+            </form>
+            <div class="m-order__list">
+            @foreach (var rental in ViewBag.Rental)
+            {
+                <div class="m-order__get">
+                    <div class="manage-o__header u-s-m-b-30">
+                        <div class="dash-l-r">
+                            <div>
+                                <div class="manage-o__text-2 u-c-secondary">Mã #@rental.ISBN</div>
+                                <div class="manage-o__text u-c-silver">Thời gian thuê @rental.RentalDate</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="manage-o__description">
+                        <div class="description__container">
+                            <div class="description__img-wrap">
+
+                                <img class="u-img-fluid" src="@Url.Content(rental.Book.CoverImage)" alt=""></div>
+                            <div class="description-title">@rental.Book.Title</div>
+                        </div>
+                        <div class="description__info-wrap">
+                            <div>
+                                @if (rental.RentalStatus == "Đang thuê") 
+                                { 
+                                    <span class="manage-o__badge badge--processing">Đang thuê</span> 
+                                } 
+                                else 
+                                { 
+                                    <span class="manage-o__badge badge--delivered">Hết hạn</span> 
+                                }
+                                </div>
+                            
+                            <div>
+
+                                <span class="manage-o__text-2 u-c-silver">Giá thuê:
+
+                                    <span class="manage-o__text-2 u-c-secondary">@rental.Book.RentalPrice</span></span></div>
+                        </div>
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+document.getElementById('my-order-sort').addEventListener('change', function () {
+    const selectedValue = this.value;
+
+    fetch(`User/Dashboard/MyRentals?filter=${selectedValue}`, {
+        method: 'GET'
+    })
+    .then(response => response.text())
+    .then(data => {
+        console.log(data);
+        document.getElementById('result-container').innerHTML = data;
+    })
+    .catch(error => console.error('Error:', error));
+});
+
+</script>
+<!-- Phân trang -->

@@ -1,57 +1,53 @@
 @{
     Layout = "~/Areas/User/Views/Shared/_SideBarLayout.cshtml";
 }
+@model LibraryManager.Areas.User.Models.ProfileViewModel
 
     <div class="col-lg-9 col-md-12">
         <div class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white u-s-m-b-30">
             <div class="dash__pad-2">
-                <h1 class="dash__h1 u-s-m-b-14">Manage My Account</h1>
+                <h1 class="dash__h1 u-s-m-b-14">Quản lý tài khoản</h1>
 
-                <span class="dash__text u-s-m-b-30">From your My Account Dashboard you have the ability to view a snapshot of your recent account activity and update your account information. Select a link below to view or edit information.</span>
+                <span class="dash__text u-s-m-b-30">Từ Bảng điều khiển Tài khoản của tôi, bạn có thể xem ảnh chụp nhanh về hoạt động tài khoản gần đây của mình và cập nhật thông tin tài khoản. Chọn liên kết bên dưới để xem hoặc chỉnh sửa thông tin.</span>
                 <div class="row">
                     <div class="col-lg-4 u-s-m-b-30">
                         <div class="dash__box dash__box--bg-grey dash__box--shadow-2 u-h-100">
                             <div class="dash__pad-3">
-                                <h2 class="dash__h2 u-s-m-b-8">PERSONAL PROFILE</h2>
+                                <h2 class="dash__h2 u-s-m-b-8">HỒ SƠ CÁ NHÂN</h2>
                                 <div class="dash__link dash__link--secondary u-s-m-b-8">
 
-                                    <a href="dash-edit-profile.html">Edit</a></div>
+                                    <a href="/User/Dashboard/EditProfile">Chỉnh sửa</a></div>
 
-                                <span class="dash__text">John Doe</span>
+                                <span class="dash__text">@Model.Username</span>
 
-                                <span class="dash__text">johndoe@domain.com</span>
-                                <div class="dash__link dash__link--secondary u-s-m-t-8">
+                                <span class="dash__text">@Model.Email</span>
+                                
+                                </div>
+                                
+                        </div>
+                    </div>
+                    <div class="col-lg-4 u-s-m-b-30">
+                        <div class="dash__box dash__box--bg-grey dash__box--shadow-2 u-h-100">
+                            <div class="dash__pad-3">
+                                <h2 class="dash__h2 u-s-m-b-8">ĐỊA CHỈ</h2>
+                                <div class="dash__link dash__link--secondary u-s-m-b-8">
 
-                                    <a data-modal="modal" data-modal-id="#dash-newsletter">Subscribe Newsletter</a></div>
+                                    <a href="">Chỉnh sửa</a></div>
+
+                                <span class="dash__text">@Model.Address</span>
+
+                                <span class="dash__text">@Model.Phone</span>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-4 u-s-m-b-30">
                         <div class="dash__box dash__box--bg-grey dash__box--shadow-2 u-h-100">
                             <div class="dash__pad-3">
-                                <h2 class="dash__h2 u-s-m-b-8">ADDRESS BOOK</h2>
-
-                                <span class="dash__text-2 u-s-m-b-8">Default Shipping Address</span>
-                                <div class="dash__link dash__link--secondary u-s-m-b-8">
-
-                                    <a href="dash-address-book.html">Edit</a></div>
-
-                                <span class="dash__text">4247 Ashford Drive Virginia - VA-20006 - USA</span>
-
-                                <span class="dash__text">(+0) 900901904</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 u-s-m-b-30">
-                        <div class="dash__box dash__box--bg-grey dash__box--shadow-2 u-h-100">
-                            <div class="dash__pad-3">
-                                <h2 class="dash__h2 u-s-m-b-8">BILLING ADDRESS</h2>
-
-                                <span class="dash__text-2 u-s-m-b-8">Default Billing Address</span>
-
-                                <span class="dash__text">4247 Ashford Drive Virginia - VA-20006 - USA</span>
-
-                                <span class="dash__text">(+0) 900901904</span>
+                                <h2 class="dash__h2 u-s-m-b-8">SỐ DƯ</h2>
+                                    <div class="dash__link dash__link--secondary u-s-m-b-8">
+                                        <a href="">Nạp tiền</a>
+                                    </div>
+                                <span class="dash__text">100000000</span>
                             </div>
                         </div>
                     </div>
@@ -59,90 +55,71 @@
             </div>
         </div>
         <div class="dash__box dash__box--shadow dash__box--bg-white dash__box--radius">
-            <h2 class="dash__h2 u-s-p-xy-20">RECENT ORDERS</h2>
+            <h2 class="dash__h2 u-s-p-xy-20">SÁCH THUÊ GẦN ĐÂY</h2>
             <div class="dash__table-wrap gl-scroll">
                 <table class="dash__table">
                     <thead>
                         <tr>
-                            <th>Order #</th>
-                            <th>Placed On</th>
-                            <th>Items</th>
-                            <th>Total</th>
+                            <th>#</th>
+                            <th>Tên sách</th>
+                            <th>Bìa</th>
+                            <th>Giá thuê</th>
+                            <th>Thời gian thuê</th>
+                            <th>Trạng thái</th>
                         </tr>
                     </thead>
                     <tbody>
+                    @if (ViewBag.RentalBooks != null)
+                    {
+                        foreach (var rental in ViewBag.RentalBooks)
+                        {
                         <tr>
-                            <td>3054231326</td>
-                            <td>26/13/2016</td>
+                            <td>@rental.ISBN</td>
+                            <td>@rental.Book.Title</td>
                             <td>
                                 <div class="dash__table-img-wrap">
 
-                                    <img class="u-img-fluid" src="~/user/images/product/electronic/product3.jpg" alt=""></div>
+                                    <img class="u-img-fluid" src="@Url.Content(rental.Book.CoverImage)" alt=""></div>
                             </td>
                             <td>
                                 <div class="dash__table-total">
 
-                                    <span>$126.00</span>
-                                    <div class="dash__link dash__link--brand">
-
-                                        <a href="dash-manage-order.html">MANAGE</a></div>
+                                    <span>@rental.Book.RentalPrice</span>
+                                    
                                 </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>3054231326</td>
-                            <td>26/13/2016</td>
-                            <td>
-                                <div class="dash__table-img-wrap">
-
-                                    <img class="u-img-fluid" src="~/user/images/product/electronic/product14.jpg" alt=""></div>
                             </td>
                             <td>
                                 <div class="dash__table-total">
 
-                                    <span>$126.00</span>
-                                    <div class="dash__link dash__link--brand">
+                                    <span>@rental.RentalDate</span>
+                                    
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    @if (rental.RentalStatus == "Đang thuê")
+                                    {
+                                        <span class="manage-o__badge badge--shipped">Đang thuê</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="manage-o__badge badge--delivered">Hết hạn</span>
+                                        <div class="dash__link dash__link--brand">
 
-                                        <a href="dash-manage-order.html">MANAGE</a></div>
+                                        <a href="/Home/BookDetail/@rental.Book.Id">Thuê lại</a></div>
+                                    }
+                                    
                                 </div>
                             </td>
                         </tr>
+                        }
+                    }
+                    else
+                    {
                         <tr>
-                            <td>3054231326</td>
-                            <td>26/13/2016</td>
-                            <td>
-                                <div class="dash__table-img-wrap">
-
-                                    <img class="u-img-fluid" src="~/user/images/product/men/product8.jpg" alt=""></div>
-                            </td>
-                            <td>
-                                <div class="dash__table-total">
-
-                                    <span>$126.00</span>
-                                    <div class="dash__link dash__link--brand">
-
-                                        <a href="dash-manage-order.html">MANAGE</a></div>
-                                </div>
-                            </td>
+                            <td colspan="4">No rentals available</td>
                         </tr>
-                        <tr>
-                            <td>3054231326</td>
-                            <td>26/13/2016</td>
-                            <td>
-                                <div class="dash__table-img-wrap">
-
-                                    <img class="u-img-fluid" src="~/user/images/product/women/product10.jpg" alt=""></div>
-                            </td>
-                            <td>
-                                <div class="dash__table-total">
-
-                                    <span>$126.00</span>
-                                    <div class="dash__link dash__link--brand">
-
-                                        <a href="dash-manage-order.html">MANAGE</a></div>
-                                </div>
-                            </td>
-                        </tr>
+                    }
                     </tbody>
                 </table>
             </div>

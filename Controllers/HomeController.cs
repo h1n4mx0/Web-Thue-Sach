@@ -91,6 +91,37 @@ namespace LibraryManager.Controllers
             return View();
         }
 
+        [HttpGet]
+        public IActionResult Search(bool? author, bool? category, int? yearRange, string searchQuery)
+        {
+            // Base query
+            var booksQuery = _db.Books
+                                .Include(b => b.Author)
+                                .Include(b => b.Category)
+                                .AsQueryable();
+
+            // Áp dụng filter 1 (Tìm kiếm theo tên tác giả)
+            if (author.HasValue && author.Value && !string.IsNullOrWhiteSpace(searchQuery))
+            {
+                booksQuery = booksQuery.Where(b => b.Author.Name.Contains(searchQuery));
+            }
+
+            // Áp dụng filter 2 (Tìm kiếm theo danh mục)
+            if (category.HasValue && category.Value && !string.IsNullOrWhiteSpace(searchQuery))
+            {
+                booksQuery = booksQuery.Where(b => b.Category.Name.Contains(searchQuery));
+            }
+
+            
+
+           
+            var results = booksQuery.ToList();
+
+            // Truyền kết quả sang View
+            return View(results);
+        }
+
+
         private int GetCurrentUserId()
         {
             // Lấy UserId từ Claim

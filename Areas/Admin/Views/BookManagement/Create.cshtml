@@ -72,3 +72,24 @@
 
     <button type="submit" class="btn btn-primary">Tạo Sách</button>
 </form>
+<script>
+    // Hiển thị thông báo (toast)
+    function showToast(message, type) {
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: type,
+            title: message,
+            showConfirmButton: false,
+            timer: 3000
+        });
+    }
+    document.addEventListener("DOMContentLoaded", function () {
+        @if (TempData["ToastMessage"] != null && TempData["ToastType"] != null)
+        {
+            <text>
+                showToast('@TempData["ToastMessage"]', '@TempData["ToastType"]');
+            </text>
+        }
+    });
+</script>

@@ -30,64 +30,142 @@
     </a>
 </div>
 
-<table class="table table-hover">
-    <thead>
-        <tr>
-            <th>Ảnh bìa</th>
-            <th>Tiêu đề</th>
-            <th>Tác giả</th>
-            <th>Thể loại</th>
-            <th>ISBN</th>
-            <th>Năm xuất bản</th>
-            <th>Trạng thái</th>
-            <th>Giá thuê</th>
-            <th>Hành động</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (!Model.Items.Any())
-        {
+<form method="post" asp-action="DeleteMultiple" id="delete-multiple-form"> 
+    @Html.AntiForgeryToken()
+    <table class="table table-hover">
+        <thead>
             <tr>
-                <td colspan="9" class="text-center">Không có sách nào</td>
+                <th><input type="checkbox" id="select-all" /></th>
+                <th>Ảnh bìa</th>
+                <th>Tiêu đề</th>
+                <th>Tác giả</th>
+                <th>Thể loại</th>
+                <th>ISBN</th>
+                <th>Năm xuất bản</th>
+                <th>Trạng thái</th>
+                <th>Giá thuê</th>
+                <th>Hành động</th>
             </tr>
-        }
-        else
-        {
-            foreach (var book in Model.Items)
+        </thead>
+        <tbody>
+            @if (!Model.Items.Any())
             {
                 <tr>
-                    <td><img src="@Url.Content(book.CoverImage)" alt="Book Cover" width="50" /></td>
-                    <td>@book.Title</td>
-                    <td>@book.Author?.Name</td>
-                    <td>@book.Category?.Name</td>
-                    <td>@book.ISBN</td>
-                    <td>@book.PublishedYear</td>
-                    <td>
-                        @if (book.Status == "Đã hoàn thành")
-                        {
-                            <label class="badge badge-success">@book.Status</label>
-                        }
-                        else
-                        {
-                            <label class="badge badge-warning">@book.Status</label>
-                        }
-                    </td>
-                    <td>@book.RentalPrice</td>
-                    <td class="d-flex justify-content-start">
-                        <form asp-action="Edit" asp-route-id="@book.Id" method="get" class="me-1"> 
-                            <button type="submit" class="btn btn-gradient-dark btn-icon-text btn-rounded"><i class="mdi mdi-table-edit btn-icon-prepend"></i>Sửa</button>
-                        </form>
-                        <form asp-action="Delete" asp-route-id="@book.Id" method="post" onsubmit="return confirm('Bạn có chắc chắn muốn xóa sách này?');">
-                            <button type="submit" class="btn btn-gradient-danger btn-icon-text btn-rounded">
-                                <i class="mdi mdi-delete-empty btn-icon-prepend"></i>Xóa
-                            </button>
-                        </form>
-                    </td>
+                    <td colspan="10" class="text-center">Không có sách nào</td>
                 </tr>
             }
+            else
+            {
+                foreach (var book in Model.Items)
+                {
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="bookIds" value="@book.Id" class="select-book" />
+                        </td>
+                        <td><img src="@Url.Content(book.CoverImage)" alt="Book Cover" width="50" /></td>
+                        <td onclick="redirectToDetails('@book.Id')" style="cursor: pointer;"><strong>@book.Title</strong></td>
+                        <td>@book.Author?.Name</td>
+                        <td>@book.Category?.Name</td>
+                        <td>@book.ISBN</td>
+                        <td>@book.PublishedYear</td>
+                        <td>
+                            @if (book.Status == "Đã hoàn thành")
+                            {
+                                <label class="badge badge-success">@book.Status</label>
+                            }
+                            else
+                            {
+                                <label class="badge badge-warning">@book.Status</label>
+                            }
+                        </td>
+                        <td>@book.RentalPrice</td>
+                        <td class="d-flex justify-content-start">
+                            <form asp-action="Delete" asp-route-id="@book.Id" method="post" name="deleteForm-@book.Id" id="deleteForm-@book.Id">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-gradient-danger btn-rounded" id="deleteButton-@book.Id">
+                                    <i class="mdi mdi-delete-empty btn-icon-prepend"></i>Xóa
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+    <button type="submit" class="btn btn-danger mt-3">Xóa đã chọn</button>
+</form>
+
+<script src="~/assets/js/sweetalert2.min.js"> </script>
+<script>
+    
+    // Hiển thị thông báo (toast)
+    function showToast(message, type) {
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: type,
+            title: message,
+            showConfirmButton: false,
+            timer: 3000
+        });
+    }
+
+    function redirectToDetails(bookId) {
+        window.location.href = `/Admin/BookManagement/Edit/${bookId}`;
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll("[id^=deleteButton]").forEach(deleteButton => {
+            deleteButton.addEventListener("click", function (e) {
+                e.preventDefault(); // Ngăn chặn gửi form ngay lập tức
+
+                Swal.fire({
+                    title: 'Bạn có chắc chắn?',
+                    text: "Bạn có chắc chắn muốn xóa sách này?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Xóa',
+                    cancelButtonText: 'Hủy'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Submit form gắn liền với nút xóa
+                        deleteButton.closest("form").submit();
+                    }
+                });
+            });
+        });
+
+        @if (TempData["ToastMessage"] != null && TempData["ToastType"] != null)
+        {
+            <text>
+                showToast('@TempData["ToastMessage"]', '@TempData["ToastType"]');
+            </text>
         }
-    </tbody>
-</table>
+        
+
+        const selectAllCheckbox = document.getElementById("select-all");
+        if (selectAllCheckbox) {
+            selectAllCheckbox.addEventListener("change", function () {
+                const isChecked = this.checked;
+                document.querySelectorAll(".select-book").forEach(checkbox => {
+                    checkbox.checked = isChecked;
+                });
+            });
+        }
+
+        const deleteForm = document.querySelector("#delete-multiple-form");
+        if (deleteForm) {
+            deleteForm.addEventListener("submit", function (e) {
+                const selectedBooks = document.querySelectorAll(".select-book:checked");
+                if (selectedBooks.length === 0) {
+                    e.preventDefault(); // Ngăn chặn gửi form
+                    showToast("Vui lòng chọn ít nhất một sách để xóa!", "warning");
+                }
+            });
+        }
+    });
+</script>
+
 
 <!-- Phân trang -->
 <nav aria-label="Page navigation">

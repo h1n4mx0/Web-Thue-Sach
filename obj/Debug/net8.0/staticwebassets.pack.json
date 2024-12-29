@@ -5657,6 +5657,10 @@
       "PackagePath": "staticwebassets/assets/images/video/video-six-image.jpg"
     },
     {
+      "Id": "/home/h1n4m/Desktop/CNWeb/LibraryManager/wwwroot/assets/js/bootstrap.bundle.min.js",
+      "PackagePath": "staticwebassets/assets/js/bootstrap.bundle.min.js"
+    },
+    {
       "Id": "/home/h1n4m/Desktop/CNWeb/LibraryManager/wwwroot/assets/js/bootstrap.min.js",
       "PackagePath": "staticwebassets/assets/js/bootstrap.min.js"
     },
@@ -5691,6 +5695,10 @@
     {
       "Id": "/home/h1n4m/Desktop/CNWeb/LibraryManager/wwwroot/assets/js/script.js",
       "PackagePath": "staticwebassets/assets/js/script.js"
+    },
+    {
+      "Id": "/home/h1n4m/Desktop/CNWeb/LibraryManager/wwwroot/assets/js/sweetalert2.min.js",
+      "PackagePath": "staticwebassets/assets/js/sweetalert2.min.js"
     },
     {
       "Id": "/home/h1n4m/Desktop/CNWeb/LibraryManager/wwwroot/assets/js/swiper-bundle.min.js",
@@ -6205,16 +6213,16 @@
       "PackagePath": "staticwebassets/assets/webfonts/fa-v4compatibility.woff2"
     },
     {
+      "Id": "/home/h1n4m/Desktop/CNWeb/LibraryManager/wwwroot/bookImages/232530ab-fcfa-4478-a9b5-756ebfc3f435.png",
+      "PackagePath": "staticwebassets/bookImages/232530ab-fcfa-4478-a9b5-756ebfc3f435.png"
+    },
+    {
       "Id": "/home/h1n4m/Desktop/CNWeb/LibraryManager/wwwroot/bookImages/3f3fb14e-3689-4b94-a675-d131fe4ae8b2.png",
       "PackagePath": "staticwebassets/bookImages/3f3fb14e-3689-4b94-a675-d131fe4ae8b2.png"
     },
     {
       "Id": "/home/h1n4m/Desktop/CNWeb/LibraryManager/wwwroot/bookImages/813da12e-24ae-4c89-ab59-be778cef3196.jpg",
       "PackagePath": "staticwebassets/bookImages/813da12e-24ae-4c89-ab59-be778cef3196.jpg"
-    },
-    {
-      "Id": "/home/h1n4m/Desktop/CNWeb/LibraryManager/wwwroot/bookImages/8f5df120-f82f-4ff1-aca2-6927ef219389.png",
-      "PackagePath": "staticwebassets/bookImages/8f5df120-f82f-4ff1-aca2-6927ef219389.png"
     },
     {
       "Id": "/home/h1n4m/Desktop/CNWeb/LibraryManager/wwwroot/bookImages/bebc9a2c-4726-4a08-86ab-ce6b9b2aca52.jpg",
@@ -6231,6 +6239,10 @@
     {
       "Id": "/home/h1n4m/Desktop/CNWeb/LibraryManager/wwwroot/bookImages/doi-ngan-dung-ngu-dai-robin-sharma.jpg",
       "PackagePath": "staticwebassets/bookImages/doi-ngan-dung-ngu-dai-robin-sharma.jpg"
+    },
+    {
+      "Id": "/home/h1n4m/Desktop/CNWeb/LibraryManager/wwwroot/bookImages/e807ad95-90f3-4116-8fe1-265e8ba198c9.png",
+      "PackagePath": "staticwebassets/bookImages/e807ad95-90f3-4116-8fe1-265e8ba198c9.png"
     },
     {
       "Id": "/home/h1n4m/Desktop/CNWeb/LibraryManager/wwwroot/bookImages/flow-dong-chay-mihaly.jpg",
@@ -6603,6 +6615,10 @@
     {
       "Id": "/home/h1n4m/Desktop/CNWeb/LibraryManager/wwwroot/user/css/app.css",
       "PackagePath": "staticwebassets/user/css/app.css"
+    },
+    {
+      "Id": "/home/h1n4m/Desktop/CNWeb/LibraryManager/wwwroot/user/css/flatpickr.min.css",
+      "PackagePath": "staticwebassets/user/css/flatpickr.min.css"
     },
     {
       "Id": "/home/h1n4m/Desktop/CNWeb/LibraryManager/wwwroot/user/css/utility.css",
@@ -7187,6 +7203,10 @@
     {
       "Id": "/home/h1n4m/Desktop/CNWeb/LibraryManager/wwwroot/user/js/app.js",
       "PackagePath": "staticwebassets/user/js/app.js"
+    },
+    {
+      "Id": "/home/h1n4m/Desktop/CNWeb/LibraryManager/wwwroot/user/js/flatpickr",
+      "PackagePath": "staticwebassets/user/js"
     },
     {
       "Id": "/home/h1n4m/Desktop/CNWeb/LibraryManager/wwwroot/user/js/jquery.shopnav.js",

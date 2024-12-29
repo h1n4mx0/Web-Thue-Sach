@@ -1,0 +1,66 @@
+@{
+    Layout = "~/Areas/User/Views/Shared/_SideBarLayout.cshtml";
+}
+
+<div class="col-lg-9 col-md-12">
+    <div class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white">
+        <div class="dash__pad-2">
+            <h1 class="dash__h1 u-s-m-b-14">Chỉnh sửa thông tin</h1>
+
+            <span class="dash__text u-s-m-b-30">Có vẻ như bạn chưa cập nhật hồ sơ của mình</span>
+            
+            <div class="row">
+                <div class="col-lg-12">
+                    <form class="dash-edit-p">
+                        <div class="gl-inline">
+                            <div class="u-s-m-b-30">
+
+                                <label class="gl-label" for="reg-fname">TÊN ĐẦY ĐỦ *</label>
+
+                                <input class="input-text input-text--primary-style" type="text" id="reg-fname" placeholder="@Model.FullName"></div>
+                            <div class="u-s-m-b-30">
+
+                                <label class="gl-label" for="reg-lname">TÊN ĐĂNG NHẬP *</label>
+
+                                <input class="input-text input-text--primary-style" type="text" id="reg-lname" placeholder="@Model.Username"></div>
+                        </div>
+                            <div class="gl-inline">
+                                <div class="u-s-m-b-30">
+                                <div class="form-group">
+                                <label class="gl-label">NGÀY SINH</label>
+                                <input type="text" class="input-text input-text--primary-style" id="birthday" placeholder="Select your birthday">
+                            </div>
+
+
+                            </div>
+                        </div>
+
+
+            
+                        <div class="gl-inline">
+                            <div class="u-s-m-b-30">
+                                <h2 class="dash__h2 u-s-m-b-8">E-mail</h2>
+
+                                <span class="dash__text">@Model.Email</span>
+                                <div class="dash__link dash__link--secondary">
+
+                                    <a href="#">Thay đổi</a></div>
+                            </div>
+                            <div class="u-s-m-b-30">
+                                <h2 class="dash__h2 u-s-m-b-8">Phone</h2>
+
+                                <span class="dash__text">@Model.Phone</span>
+                                <div class="dash__link dash__link--secondary">
+
+                                    <a href="#">Thay đổi</a></div>
+                            </div>
+                        </div>
+
+                        <button class="btn btn--e-brand-b-2" type="submit">LƯU</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

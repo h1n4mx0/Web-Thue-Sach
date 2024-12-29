@@ -1,6 +1,7 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 <head>
     <meta charset="UTF-8">
     <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
@@ -14,6 +15,7 @@
 
     <!--====== Vendor Css ======-->
     <link rel="stylesheet" href="~/user/css/vendor.css">
+    <link rel="stylesheet" href="~/user/css/flatpickr.min.css">
 
     <!--====== Utility-Spacing ======-->
     <link rel="stylesheet" href="~/user/css/utility.css">
@@ -72,29 +74,23 @@
                                         <div class="dash__box dash__box--bg-white dash__box--shadow u-s-m-b-30">
                                             <div class="dash__pad-1">
 
-                                                <span class="dash__text u-s-m-b-16">Xin chào, John Doe</span>
+                                                <span class="dash__text u-s-m-b-16">Xin chào, @ViewBag.FullName</span>
                                                 <ul class="dash__f-list">
                                                     <li>
 
-                                                        <a class="dash-active" href="dashboard.html">Quản lý tài khoản</a></li>
+                                                        <a class="dash-active" href="/User/Dashboard/Index">Quản lý tài khoản</a></li>
                                                     <li>
 
-                                                        <a href="dash-my-profile.html">Hồ sơ của tôi</a></li>
+                                                        <a href="/User/Dashboard/MyProfile">Hồ sơ của tôi</a></li>
                                                     <li>
 
-                                                        <a href="dash-address-book.html">Address Book</a></li>
+                                                        <a href="/User/Dashboard/EditProfile">Address Book</a></li>
                                                     <li>
 
-                                                        <a href="dash-track-order.html">Track Order</a></li>
+                                                        <a href="/User/Dashboard/MyRentals">Đơn của tôi</a></li>
                                                     <li>
 
-                                                        <a href="dash-my-order.html">My Orders</a></li>
-                                                    <li>
-
-                                                        <a href="dash-payment-option.html">My Payment Options</a></li>
-                                                    <li>
-
-                                                        <a href="dash-cancellation.html">My Returns & Cancellations</a></li>
+                                                        <a href="/User/Dashboard/RentBook">Sách đang thuê</a></li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -106,28 +102,20 @@
 
                                                             <span class="dash__w-icon dash__w-icon-style-1"><i class="fas fa-cart-arrow-down"></i></span>
 
-                                                            <span class="dash__w-text">4</span>
+                                                            <span class="dash__w-text">@ViewBag.TotalRentals</span>
 
-                                                            <span class="dash__w-name">Orders Placed</span></div>
+                                                            <span class="dash__w-name">Đơn sách</span></div>
                                                     </li>
                                                     <li>
                                                         <div class="dash__w-wrap">
 
                                                             <span class="dash__w-icon dash__w-icon-style-2"><i class="fas fa-times"></i></span>
 
-                                                            <span class="dash__w-text">0</span>
+                                                            <span class="dash__w-text">@ViewBag.OutRentals</span>
 
-                                                            <span class="dash__w-name">Cancel Orders</span></div>
+                                                            <span class="dash__w-name">Sách hết hạn</span></div>
                                                     </li>
-                                                    <li>
-                                                        <div class="dash__w-wrap">
-
-                                                            <span class="dash__w-icon dash__w-icon-style-3"><i class="far fa-heart"></i></span>
-
-                                                            <span class="dash__w-text">0</span>
-
-                                                            <span class="dash__w-name">Wishlist</span></div>
-                                                    </li>
+                                             
                                                 </ul>
                                             </div>
                                         </div>
@@ -155,13 +143,12 @@
 
         <!--====== Vendor Js ======-->
         <script src="~/user/js/vendor.js"></script>
-
         <!--====== jQuery Shopnav plugin ======-->
         <script src="~/user/js/jquery.shopnav.js"></script>
 
         <!--====== App ======-->
         <script src="~/user/js/app.js"></script>
-
+        
         <!--====== Noscript ======-->
         <noscript>
             <div class="app-setting">

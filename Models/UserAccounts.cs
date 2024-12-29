@@ -30,7 +30,7 @@ namespace LibraryManager.Models
         public virtual Roles Role { get; set; }
 
         [ForeignKey("UserId")]
-        public virtual Users User { get; set; }
+        public virtual Users Users { get; set; }
         public virtual ICollection<Rentals> Rentals { get; set; } = new List<Rentals>();
     }
 }

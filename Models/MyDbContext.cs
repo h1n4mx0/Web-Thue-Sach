@@ -19,11 +19,12 @@ namespace LibraryManager.Models
         public virtual DbSet<UserAccounts> UserAccounts { get; set; }
         public virtual DbSet<Books> Books { get; set; }
         public virtual DbSet<Categories> Categories { get; set; }
-        public virtual DbSet<Chapters> Chapters { get; set; }
         public virtual DbSet<Rentals> Rentals { get; set; }
         public virtual DbSet<Roles> Roles { get; set; }
         public virtual DbSet<RolePermissions> RolePermissions { get; set; }
         public virtual DbSet<Permissions> Permissions { get; set; }
+        public virtual DbSet<BookContents> BookContents { get; set; }
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -47,7 +48,7 @@ namespace LibraryManager.Models
                 entity.Property(e => e.Phone).HasMaxLength(20);
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
                 entity.HasOne(e => e.UserAccounts)
-                      .WithOne(e => e.User)
+                      .WithOne(e => e.Users)
                       .HasForeignKey<UserAccounts>(e => e.UserId);
             });
 
@@ -164,20 +165,6 @@ namespace LibraryManager.Models
                       .HasForeignKey(d => d.AuthorId);
             });
 
-            // Chapters Table Configuration
-            modelBuilder.Entity<Chapters>(entity =>
-            {
-                entity.ToTable("Chapters");
-                entity.HasKey(e => e.Id);
-                entity.Property(e => e.ChapterNumber).IsRequired();
-                entity.Property(e => e.Title);
-                entity.Property(e => e.FilePath);
-                entity.HasOne(d => d.Book)
-                      .WithMany(p => p.Chapters)
-                      .HasForeignKey(d => d.BookId)
-                      .OnDelete(DeleteBehavior.Cascade);
-            });
-
             // Rentals Table Configuration
             modelBuilder.Entity<Rentals>(entity =>
             {
@@ -199,6 +186,13 @@ namespace LibraryManager.Models
                       .HasPrincipalKey(b => b.ISBN)
                       .OnDelete(DeleteBehavior.Cascade);
             });
+
+            modelBuilder.Entity<BookContents>()
+                .HasOne(bc => bc.Book)
+                .WithMany(b => b.BookContent)
+                .HasForeignKey(bc => bc.BookId);
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

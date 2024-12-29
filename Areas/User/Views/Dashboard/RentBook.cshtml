@@ -1,0 +1,51 @@
+@{
+    Layout = "~/Areas/User/Views/Shared/_SideBarLayout.cshtml";
+}
+
+<div class="col-lg-9 col-md-12">
+    <div class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white u-s-m-b-30">
+        <div class="dash__pad-2">
+            <h1 class="dash__h1 u-s-m-b-14">Sách Đang Thuê</h1>
+
+            <span class="dash__text u-s-m-b-30">Tra cứu lại các đơn sách bạn đang thuê.</span>
+            <div class="m-order__list">
+            @foreach (var rental in ViewBag.Rental)
+            {
+                <div class="m-order__get">
+                    <div class="manage-o__header u-s-m-b-30">
+                        <div class="dash-l-r">
+                            <div>
+                                <div class="manage-o__text-2 u-c-secondary">Mã #@rental.ISBN</div>
+                                <div class="manage-o__text u-c-silver">Thời gian thuê @rental.RentalDate</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="manage-o__description">
+                        <div class="description__container">
+                            <div class="description__img-wrap">
+
+                                <img class="u-img-fluid" src="@Url.Content(rental.Book.CoverImage)" alt=""></div>
+                            <div class="description-title">@rental.Book.Title</div>
+                        </div>
+                        <div class="description__info-wrap">
+                            <div>
+                                
+                                <span class="manage-o__badge badge--processing">Đang thuê</span> 
+                                
+                            </div>
+                            
+                            <div>
+
+                                <span class="manage-o__text-2 u-c-silver">Giá thuê:
+
+                                <span class="manage-o__text-2 u-c-secondary">@rental.Book.RentalPrice</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -21,6 +21,6 @@ namespace LibraryManager.Models
         public virtual Categories Category { get; set; }
         public virtual Authors Author { get; set; }
         public virtual ICollection<Rentals> Rentals { get; set; } = new List<Rentals>(); // Add Rentals navigation property
-        public virtual ICollection<Chapters> Chapters { get; set; } = new List<Chapters>(); // Added Chapters navigation property
+        public virtual ICollection<BookContents> BookContent { get; set; } = new List<BookContents>(); // Added Chapters navigation property
     }
 }

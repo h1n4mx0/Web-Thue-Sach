@@ -46,7 +46,6 @@ namespace LibraryManager.Areas.Admin.Controllers
                 var startOfMonth = new DateTime(date.Year, date.Month, 1);
                 var endOfMonth = startOfMonth.AddMonths(1);
 
-                // Đếm số lượt thuê trong tháng
                 var rentalsInMonth = _db.Rentals
                     .Count(r => r.RentalDate >= startOfMonth && r.RentalDate < endOfMonth);
 

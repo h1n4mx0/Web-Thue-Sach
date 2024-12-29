@@ -1,8 +1,7 @@
+@model IEnumerable<BookContents> 
+
 @{
-    Layout = "~/Views/Shared/_Layout.cshtml";
-    var book = ViewBag.Book as LibraryManager.Models.Books;
-    var userId = ViewBag.UserId;
-    ViewData["Title"] = @book.Title;
+    ViewData["Title"] = "Đọc sách";
 }
 
 <body>
@@ -37,14 +36,10 @@
             <div class="container">
                 <div class="banner-inner__content">
                     <h1>
-                        @book.Title
+                        @ViewBag.BookTitle
                     </h1>
                     <ul>
                         <li><a href="/Home/Index">Trang chủ</a></li>
-                        <li><i class="fa-regular fa-angle-right"></i></li>
-                        <li><a href="/Home/CategoryDetail/@book.CategoryId">@book.Category?.Name</a></li>
-                        <li><i class="fa-regular fa-angle-right"></i></li>
-                        <li>@book.Title</li>
                     </ul>
                 </div>
             </div>
@@ -58,77 +53,16 @@
                     <div class="col-lg-8 order-2 order-lg-1">
                         <div class="courses-details__item-left">
                             <div class="image mb-40">
-                                <img src="@Url.Content(book.CoverImage)" alt="image">
+                                <img src="@Url.Content(ViewBag.CoverImage)" alt="image">
                             </div>
-                            <a href="/Home/CategoryDetail/@book.CategoryId" class="tag">@book.Category?.Name</a>
-                            <h3 class="fs-30 mt-20 mb-20">@book.Title</h3>
-                            <ul
-                                class="pt-20 pb-20 d-flex flex-wrap align-items-center gap-3 gap-md-5 bor-top bor-bottom">
-                                <li class="mb-0"><img src="~/assets/images/courses/courses-user1.jpg" alt="image"><a
-                                        href="#0" class="primary-hover">@book.Author?.Name</a></li>
-                                <li class="mb-0">
-                                    <svg class="me-1" width="20" height="20" viewBox="0 0 20 20" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <g clip-path="url(#clip0_1396_3523)">
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M10 19C14.9706 19 19 14.9707 19 10C19 5.02944 14.9707 0.999979 10 0.999979C5.02944 0.999979 0.999979 5.02944 0.999979 10C0.999979 14.9706 5.02944 19 10 19ZM10 20C15.5228 20 20 15.5228 20 10C20 4.47711 15.5228 0 10 0C4.47711 0 0 4.47711 0 10C0 15.5228 4.47711 20 10 20Z"
-                                                fill="#2EB97E" />
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M12.6006 9.99928L8.00204 6.9336V13.0651L12.6006 9.99928ZM13.5297 9.41687C13.9453 9.69399 13.9453 10.3047 13.5297 10.5818L8.09026 14.2081C7.62509 14.5183 7.00195 14.1847 7.00195 13.6256V6.37304C7.00195 5.81395 7.62509 5.48048 8.09026 5.79063L13.5297 9.41687Z"
-                                                fill="#2EB97E" />
-                                        </g>
-                                        <defs>
-                                            <clipPath id="clip0_1396_3523">
-                                                <rect width="20" height="20" fill="white" />
-                                            </clipPath>
-                                        </defs>
-                                    </svg>
-                                    <a href="#0" class="primary-hover">@book.Views lượt thuê</a>
-                                </li>
-                                <li>
-                                    <svg class="me-1" width="18" height="18" viewBox="0 0 18 18" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                            d="M9 1.5L11.3175 6.195L16.5 6.9525L12.75 10.605L13.635 15.765L9 13.3275L4.365 15.765L5.25 10.605L1.5 6.9525L6.6825 6.195L9 1.5Z"
-                                            fill="#FFA41B" />
-                                    </svg>
-
-                                    <a href="#0" class="primary-hover">3.4 (36 Đánh giá)</a>
-                                </li>
-                            </ul>
+                            <h3 class="fs-30 mt-20 mb-20">@ViewBag.BookTitle</h3>
+                            @foreach (var chapter in Model)
+                            {
                             <div class="content mt-30 mb-30">
-                                <h3 class="fs-30 mb-20">Tóm tắt sách</h3>
-                                <p class="mb-20">@book.Summary</p>
+                                <h3 class="fs-30 mb-20">@chapter.Chapter: @chapter.Title</h3>
+                                <p class="mb-20">@chapter.Content</p>
                             </div>
-                            <div class="content">
-                                <ul class="mt-30">
-                                    <li>
-                                        <span><svg width="16" height="16" viewBox="0 0 16 16" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M7.38397 14.1797C7.34153 14.1797 7.29954 14.171 7.26066 14.1539C7.22178 14.1369 7.18683 14.1121 7.15803 14.0809L1.06612 7.49119C1.02551 7.44726 0.99859 7.39244 0.988651 7.33344C0.978712 7.27445 0.986187 7.21384 1.01016 7.15902C1.03414 7.10421 1.07357 7.05758 1.12364 7.02483C1.17371 6.99208 1.23223 6.97464 1.29206 6.97464H4.22437C4.26839 6.97464 4.31191 6.98409 4.35197 7.00234C4.39204 7.0206 4.42772 7.04723 4.45661 7.08045L6.49255 9.42273C6.71258 8.95239 7.13852 8.16925 7.88597 7.21497C8.99095 5.8042 11.0463 3.7294 14.5627 1.85642C14.6307 1.82023 14.7097 1.81083 14.7843 1.83009C14.8588 1.84936 14.9235 1.89587 14.9654 1.96046C15.0073 2.02504 15.0235 2.103 15.0108 2.17894C14.998 2.25488 14.9573 2.32328 14.8966 2.37064C14.8831 2.38113 13.5273 3.44882 11.967 5.40448C10.5309 7.20417 8.62191 10.1469 7.68255 13.946C7.66605 14.0128 7.62767 14.0721 7.57354 14.1144C7.5194 14.1568 7.45263 14.1799 7.38388 14.1799L7.38397 14.1797Z"
-                                                    fill="#181818" />
-                                            </svg></span>Ngon</li>
-                                    <li>
-                                        <span><svg width="16" height="16" viewBox="0 0 16 16" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M7.38397 14.1797C7.34153 14.1797 7.29954 14.171 7.26066 14.1539C7.22178 14.1369 7.18683 14.1121 7.15803 14.0809L1.06612 7.49119C1.02551 7.44726 0.99859 7.39244 0.988651 7.33344C0.978712 7.27445 0.986187 7.21384 1.01016 7.15902C1.03414 7.10421 1.07357 7.05758 1.12364 7.02483C1.17371 6.99208 1.23223 6.97464 1.29206 6.97464H4.22437C4.26839 6.97464 4.31191 6.98409 4.35197 7.00234C4.39204 7.0206 4.42772 7.04723 4.45661 7.08045L6.49255 9.42273C6.71258 8.95239 7.13852 8.16925 7.88597 7.21497C8.99095 5.8042 11.0463 3.7294 14.5627 1.85642C14.6307 1.82023 14.7097 1.81083 14.7843 1.83009C14.8588 1.84936 14.9235 1.89587 14.9654 1.96046C15.0073 2.02504 15.0235 2.103 15.0108 2.17894C14.998 2.25488 14.9573 2.32328 14.8966 2.37064C14.8831 2.38113 13.5273 3.44882 11.967 5.40448C10.5309 7.20417 8.62191 10.1469 7.68255 13.946C7.66605 14.0128 7.62767 14.0721 7.57354 14.1144C7.5194 14.1568 7.45263 14.1799 7.38388 14.1799L7.38397 14.1797Z"
-                                                    fill="#181818" />
-                                            </svg></span>
-                                        Bổ
-                                    </li>
-                                    <li>
-                                        <span><svg width="16" height="16" viewBox="0 0 16 16" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M7.38397 14.1797C7.34153 14.1797 7.29954 14.171 7.26066 14.1539C7.22178 14.1369 7.18683 14.1121 7.15803 14.0809L1.06612 7.49119C1.02551 7.44726 0.99859 7.39244 0.988651 7.33344C0.978712 7.27445 0.986187 7.21384 1.01016 7.15902C1.03414 7.10421 1.07357 7.05758 1.12364 7.02483C1.17371 6.99208 1.23223 6.97464 1.29206 6.97464H4.22437C4.26839 6.97464 4.31191 6.98409 4.35197 7.00234C4.39204 7.0206 4.42772 7.04723 4.45661 7.08045L6.49255 9.42273C6.71258 8.95239 7.13852 8.16925 7.88597 7.21497C8.99095 5.8042 11.0463 3.7294 14.5627 1.85642C14.6307 1.82023 14.7097 1.81083 14.7843 1.83009C14.8588 1.84936 14.9235 1.89587 14.9654 1.96046C15.0073 2.02504 15.0235 2.103 15.0108 2.17894C14.998 2.25488 14.9573 2.32328 14.8966 2.37064C14.8831 2.38113 13.5273 3.44882 11.967 5.40448C10.5309 7.20417 8.62191 10.1469 7.68255 13.946C7.66605 14.0128 7.62767 14.0721 7.57354 14.1144C7.5194 14.1568 7.45263 14.1799 7.38388 14.1799L7.38397 14.1797Z"
-                                                    fill="#181818" />
-                                            </svg></span>
-                                        Rẻ
-                                    </li>
-                                </ul>
-                            </div>
+                            }
                         </div>
                     </div>
                     <div class="col-lg-4 order-1 order-lg-2">
@@ -144,7 +78,7 @@
                                                 fill="#2EB97E" />
                                         </svg>
 
-                                        <p><strong>Mã sách:</strong> <span>@book.ISBN</span></p>
+                                        <p><strong>Mã sách:</strong> <span>@ViewBag.ISBN</span></p>
                                     </li>
                                     <li>
                                         <svg class="me-1" width="20" height="20" viewBox="0 0 20 20" fill="none"
@@ -157,7 +91,7 @@
                                                 fill="#2EB97E" />
                                         </svg>
 
-                                        <p><strong>Thời gian đọc:</strong> <span>@book.ReadingDuration</span></p>
+                                        <p><strong>Thời gian đọc:</strong> <span>@ViewBag.ReadingDuration</span></p>
                                     </li>
                                     <li>
                                         <svg class="me-1" width="20" height="20" viewBox="0 0 20 20" fill="none"
@@ -175,7 +109,7 @@
                                                 d="M14.2093 6.48497H13.8153C13.6335 6.48497 13.5123 6.36375 13.5123 6.18194C13.5123 6.00012 13.6335 5.87891 13.8153 5.87891H14.2093C14.3911 5.87891 14.5123 6.00012 14.5123 6.18194C14.5123 6.36375 14.3911 6.48497 14.2093 6.48497ZM14.785 9.42436H8.57292C8.3911 9.42436 8.26989 9.30315 8.26989 9.12133C8.26989 8.93951 8.3911 8.8183 8.57292 8.8183H14.785C14.9669 8.8183 15.0881 8.93951 15.0881 9.12133C15.0881 9.30315 14.9669 9.42436 14.785 9.42436ZM14.785 11.9395H8.57292C8.3911 11.9395 8.26989 11.8183 8.26989 11.6365C8.26989 11.4547 8.3911 11.3335 8.57292 11.3335H14.785C14.9669 11.3335 15.0881 11.4547 15.0881 11.6365C15.0881 11.8183 14.9669 11.9395 14.785 11.9395ZM14.785 14.4547H8.57292C8.3911 14.4547 8.26989 14.3335 8.26989 14.1516C8.26989 13.9698 8.3911 13.8486 8.57292 13.8486H14.785C14.9669 13.8486 15.0881 13.9698 15.0881 14.1516C15.0881 14.3335 14.9669 14.4547 14.785 14.4547ZM11.6941 16.9698H8.57292C8.3911 16.9698 8.26989 16.8486 8.26989 16.6668C8.26989 16.485 8.3911 16.3638 8.57292 16.3638H11.6941C11.8759 16.3638 11.9972 16.485 11.9972 16.6668C11.9972 16.8486 11.8759 16.9698 11.6941 16.9698ZM6.33049 9.96982H5.20928C5.02746 9.96982 4.90625 9.8486 4.90625 9.66679V8.54557C4.90625 8.36376 5.02746 8.24254 5.20928 8.24254H6.33049C6.51231 8.24254 6.63352 8.36376 6.63352 8.54557V9.66679C6.63352 9.8486 6.51231 9.96982 6.33049 9.96982ZM5.51231 9.36375H6.02746V8.8486H5.51231V9.36375ZM6.33049 12.485H5.20928C5.02746 12.485 4.90625 12.3638 4.90625 12.1819V11.0607C4.90625 10.8789 5.02746 10.7577 5.20928 10.7577H6.33049C6.51231 10.7577 6.63352 10.8789 6.63352 11.0607V12.1819C6.63352 12.3638 6.51231 12.485 6.33049 12.485ZM5.51231 11.8789H6.02746V11.3638H5.51231V11.8789ZM6.33049 15.0001H5.20928C5.02746 15.0001 4.90625 14.8789 4.90625 14.6971V13.5759C4.90625 13.3941 5.02746 13.2728 5.20928 13.2728H6.33049C6.51231 13.2728 6.63352 13.3941 6.63352 13.5759V14.6971C6.63352 14.8789 6.51231 15.0001 6.33049 15.0001ZM5.51231 14.3941H6.02746V13.8789H5.51231V14.3941ZM6.33049 17.5153H5.20928C5.02746 17.5153 4.90625 17.3941 4.90625 17.2122V16.091C4.90625 15.9092 5.02746 15.788 5.20928 15.788H6.33049C6.51231 15.788 6.63352 15.9092 6.63352 16.091V17.2122C6.63352 17.3941 6.51231 17.5153 6.33049 17.5153ZM5.51231 16.9092H6.02746V16.3941H5.51231V16.9092Z"
                                                 fill="#2EB97E" />
                                         </svg>
-                                        <p><strong>Lượt thuê:</strong> <span>@book.Views</span></p>
+                                        <p><strong>Lượt thuê:</strong> <span>@ViewBag.Views</span></p>
                                     </li>
                                     <li>
                                         <svg class="me-1" width="20" height="20" viewBox="0 0 20 20" fill="none"
@@ -197,7 +131,7 @@
                                                 </clipPath>
                                             </defs>
                                         </svg>
-                                        <p><strong>Trạng thái sách:</strong> <span>@book.Status</span></p>
+                                        <p><strong>Trạng thái sách:</strong> <span>@ViewBag.Status</span></p>
                                     </li>
                                     <li>
                                         <svg class="me-1" width="20" height="20" viewBox="0 0 20 20" fill="none"
@@ -206,46 +140,9 @@
                                                 d="M17.5927 14.6462C18.4506 13.2485 18.9037 11.64 18.9015 9.99999C18.9037 8.35989 18.4506 6.75117 17.5927 5.35339L17.5879 5.34559C16.7919 4.04823 15.6765 2.97667 14.3484 2.23331C13.0202 1.48994 11.5235 1.09961 10.0015 1.09961C8.4794 1.09961 6.98277 1.48994 5.65458 2.23331C4.32639 2.97667 3.21102 4.04823 2.41507 5.34559L2.41027 5.35339C1.55445 6.7521 1.10156 8.36002 1.10156 9.99979C1.10156 11.6396 1.55445 13.2475 2.41027 14.6462L2.41527 14.6542C3.21125 15.9515 4.32662 17.023 5.6548 17.7663C6.98298 18.5096 8.47959 18.8999 10.0016 18.8999C11.5237 18.8999 13.0203 18.5095 14.3484 17.7662C15.6766 17.0228 16.7919 15.9513 17.5879 14.654L17.5927 14.6462ZM11.1391 17.3744C10.9694 17.5381 10.7742 17.6729 10.5611 17.7736C10.3862 17.8567 10.195 17.8998 10.0014 17.8998C9.80774 17.8998 9.61655 17.8567 9.44167 17.7736C9.03618 17.5665 8.68907 17.261 8.43207 16.8852C7.90723 16.1267 7.51831 15.2827 7.28267 14.391C8.188 14.3353 9.09427 14.3069 10.0015 14.3058C10.9083 14.3058 11.8146 14.3342 12.7205 14.391C12.59 14.8495 12.4271 15.2981 12.2329 15.7334C11.9771 16.3456 11.6058 16.9028 11.1391 17.3744ZM2.11887 10.4998H5.70867C5.73206 11.5015 5.84065 12.4993 6.03327 13.4826C5.05193 13.569 4.07313 13.6877 3.09687 13.8386C2.52512 12.8129 2.1909 11.6719 2.11887 10.4998ZM3.09687 6.16119C4.07273 6.31239 5.05187 6.43105 6.03427 6.51719C5.84131 7.50034 5.73252 8.49815 5.70907 9.49979H2.11887C2.19093 8.32776 2.52514 7.18685 3.09687 6.16119ZM8.86387 2.62519C9.03349 2.4615 9.22873 2.32666 9.44187 2.22599C9.61675 2.14289 9.80794 2.09978 10.0016 2.09978C10.1952 2.09978 10.3864 2.14289 10.5613 2.22599C10.9668 2.43309 11.3139 2.73853 11.5709 3.11439C12.0957 3.87286 12.4846 4.71684 12.7203 5.60859C11.8149 5.66432 10.9087 5.69272 10.0015 5.69379C9.09467 5.69379 8.18833 5.66539 7.28247 5.60859C7.41292 5.15011 7.57587 4.70151 7.77007 4.26619C8.02579 3.65396 8.39717 3.09679 8.86387 2.62519ZM17.8841 9.49979H14.2943C14.2709 8.49811 14.1623 7.50025 13.9697 6.51699C14.951 6.43059 15.9298 6.31192 16.9061 6.16099C17.4778 7.18671 17.812 8.32769 17.8841 9.49979ZM7.03907 13.4048C6.84353 12.4481 6.7331 11.476 6.70907 10.4998H13.2941C13.2703 11.476 13.16 12.4482 12.9647 13.405C11.978 13.3402 10.9903 13.3071 10.0015 13.3058C9.01347 13.3058 8.026 13.3388 7.03907 13.4048ZM12.9639 6.59479C13.1594 7.55148 13.2698 8.52361 13.2939 9.49979H6.70907C6.73287 8.52356 6.8431 7.55136 7.03847 6.59459C8.02513 6.65939 9.01287 6.69245 10.0017 6.69379C10.9897 6.69379 11.9771 6.66072 12.9641 6.59459L12.9639 6.59479ZM14.2939 10.4998H17.8841C17.812 11.6718 17.4778 12.8127 16.9061 13.8384C15.9301 13.6872 14.9509 13.5685 13.9687 13.4824C14.1616 12.4992 14.2704 11.5014 14.2939 10.4998ZM16.3065 5.24079C15.4531 5.36385 14.5973 5.46132 13.7391 5.53319C13.5848 4.95879 13.3859 4.39735 13.1441 3.85399C12.9233 3.354 12.6454 2.8812 12.3161 2.44499C13.9076 2.93312 15.3042 3.91162 16.3065 5.24079ZM4.41547 4.41359C5.32845 3.49973 6.45167 2.82378 7.68667 2.44499C7.66787 2.46939 7.64867 2.49259 7.63027 2.51719C6.99546 3.43097 6.53306 4.4531 6.26587 5.53319C5.40747 5.46052 4.55107 5.36305 3.69667 5.24079C3.91699 4.94888 4.15716 4.67249 4.41547 4.41359ZM3.69667 14.7588C4.54987 14.6357 5.40567 14.5383 6.26407 14.4664C6.41831 15.0408 6.61725 15.6022 6.85907 16.1456C7.07989 16.6456 7.35773 17.1184 7.68707 17.5546C6.09554 17.0665 4.69894 16.0879 3.69667 14.7588ZM15.5879 15.586C14.6749 16.4999 13.5517 17.1758 12.3167 17.5546C12.3355 17.5302 12.3547 17.507 12.3731 17.4824C13.0079 16.5686 13.4703 15.5465 13.7375 14.4664C14.5959 14.5391 15.4523 14.6365 16.3067 14.7588C16.0863 15.0507 15.8462 15.3271 15.5879 15.586Z"
                                                 fill="#2EB97E" />
                                         </svg>
-                                        <p><strong>Năm xuất bản:</strong> <span>@book.PublishedYear</span></p>
+                                        <p><strong>Năm xuất bản:</strong> <span>@ViewBag.PublishedYear</span></p>
                                     </li>
                                 </ul>
-                                <span class="price">@book.RentalPrice</span>
-                                <a href="javascript:void(0)" class="btn-one rent-button" id="rental-btn" data-isbn="@book.ISBN" onclick="rentBook(this)">
-                                    Thuê ngay<i class="fa-light fa-arrow-right-long"></i>
-                                </a>
-                                <div class="share">
-                                    <strong>Liên hệ:</strong>
-                                    <div class="social-icons">
-                                        <a href="#0"><i class="fa-brands fa-facebook-f"></i></a>
-                                        <a href="#0"><i class="fa-brands fa-twitter"></i></a>
-                                        <a href="#0"><i class="fa-brands fa-linkedin-in"></i></a>
-                                        <a href="#0"><i class="fa-brands fa-youtube"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="team-details__item mt-120">
-                    <div class="row g-4 align-items-center">
-                        <div class="col-lg-4">
-                            <div class="image">
-                                <img src="~/assets/images/team/team-details-image1.jpg" alt="image">
-                            </div>
-                        </div>
-                        <div class="col-lg-8">
-                            <div class="team-details__content">
-                                <h2>@book.Author?.Name</h2>
-                                <span>Tác giả</span>
-                                <p class="mt-25">@book.Author?.Bio</p>
-                                <div class="team-details__social">
-                                    <div class="social-icons">
-                                        <a href="#0"><i class="fa-brands fa-facebook-f"></i></a>
-                                        <a href="#0"><i class="fa-brands fa-twitter"></i></a>
-                                        <a href="#0"><i class="fa-brands fa-linkedin-in"></i></a>
-                                        <a href="#0"><i class="fa-brands fa-youtube"></i></a>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -346,92 +243,8 @@
         </section>
         <!-- Courses area end here -->
     </main>
-
-<script src="~/assets/js/sweetalert2.min.js"> </script>
-
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const rentButtons = document.querySelectorAll(".rent-button");
-        
-        // Gọi API để lấy danh sách sách đã thuê
-        fetch('/Rental/GetRentedBooks', {
-            method: "GET",
-            headers: { "Content-Type": "application/json" }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                const rentedBooks = data.rentedBooks;
-                console.log(rentedBooks);
-                
-                // Cập nhật trạng thái nút dựa trên danh sách sách đã thuê
-                rentButtons.forEach(button => {
-                    const isbn = button.getAttribute("data-isbn");
-                    console.log(isbn);
-
-                    if (rentedBooks.includes(isbn)) {
-                        console.log("ok");
-                        updateButtonToReadNow(button, isbn);
-                    }
-                });
-            } else {
-                console.error("Không thể lấy danh sách sách đã thuê:", data.message);
-                showToast("Không thể tải trạng thái sách!", "error");
-            }
-        })
-        .catch(error => {
-            console.error("Lỗi khi gọi API:", error);
-            showToast("Đã xảy ra lỗi, vui lòng thử lại!", "error");
-        });
-    });
-
-    // Xử lý thuê sách
-    function rentBook(button) {
-        const isbn = button.getAttribute("data-isbn");
-
-        fetch(`/Rental/RentalDetail?ISBN=${isbn}`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Hiển thị thông báo thành công
-                showToast("Thuê sách thành công!", "success");
-
-                // Thay đổi nút thành "Đọc ngay"
-                updateButtonToReadNow(button, isbn);
-            } else {
-                // Hiển thị thông báo lỗi
-                showToast(data.message, "error");
-            }
-        })
-        .catch(error => {
-            console.error("Error:", error);
-            showToast("Đã xảy ra lỗi, vui lòng thử lại!", "error");
-        });
-    }
-
-    // Cập nhật nút thành "Đọc ngay"
-    function updateButtonToReadNow(button, isbn) {
-        button.innerHTML = 'Đọc ngay<i class="fa-light fa-arrow-right-long"></i>';
-        button.setAttribute("href", `/Book/Read?ISBN=${isbn}`);
-        button.removeAttribute("onclick"); // Không cho phép bấm lại
-    }
-
-    // Hiển thị thông báo (toast)
-    function showToast(message, type) {
-        Swal.fire({
-            toast: true,
-            position: 'top-end',
-            icon: type,
-            title: message,
-            showConfirmButton: false,
-            timer: 3000
-        });
-    }
-</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="~/assets/js/sweetalert2@11"> </script>
     
 </body>
 
