@@ -68,7 +68,7 @@
 <script>
 document.getElementById('my-order-sort').addEventListener('change', function () {
     const selectedValue = this.value;
-
+    console.log(selectedValue);
     fetch(`User/Dashboard/MyRentals?filter=${selectedValue}`, {
         method: 'GET'
     })

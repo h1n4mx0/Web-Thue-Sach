@@ -22,7 +22,11 @@
                 @foreach (var book in Model)
                 {
                     <tr>
-                        <td>@book.Title</td>
+                        <td>
+                            <a href="/Home/BookDetail/@book.Id">
+                                @book.Title
+                            </a>
+                        </td>
                         <td>@book.Author.Name</td>
                         <td>@book.PublishedYear</td>
                         <td>@book.Category.Name</td>

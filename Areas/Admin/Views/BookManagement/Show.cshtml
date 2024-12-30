@@ -35,7 +35,6 @@
     <table class="table table-hover">
         <thead>
             <tr>
-                <th><input type="checkbox" id="select-all" /></th>
                 <th>Ảnh bìa</th>
                 <th>Tiêu đề</th>
                 <th>Tác giả</th>
@@ -44,7 +43,7 @@
                 <th>Năm xuất bản</th>
                 <th>Trạng thái</th>
                 <th>Giá thuê</th>
-                <th>Hành động</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -59,9 +58,6 @@
                 foreach (var book in Model.Items)
                 {
                     <tr>
-                        <td>
-                            <input type="checkbox" name="bookIds" value="@book.Id" class="select-book" />
-                        </td>
                         <td><img src="@Url.Content(book.CoverImage)" alt="Book Cover" width="50" /></td>
                         <td onclick="redirectToDetails('@book.Id')" style="cursor: pointer;"><strong>@book.Title</strong></td>
                         <td>@book.Author?.Name</td>
@@ -92,7 +88,6 @@
             }
         </tbody>
     </table>
-    <button type="submit" class="btn btn-danger mt-3">Xóa đã chọn</button>
 </form>
 
 <script src="~/assets/js/sweetalert2.min.js"> </script>
@@ -140,28 +135,6 @@
             <text>
                 showToast('@TempData["ToastMessage"]', '@TempData["ToastType"]');
             </text>
-        }
-        
-
-        const selectAllCheckbox = document.getElementById("select-all");
-        if (selectAllCheckbox) {
-            selectAllCheckbox.addEventListener("change", function () {
-                const isChecked = this.checked;
-                document.querySelectorAll(".select-book").forEach(checkbox => {
-                    checkbox.checked = isChecked;
-                });
-            });
-        }
-
-        const deleteForm = document.querySelector("#delete-multiple-form");
-        if (deleteForm) {
-            deleteForm.addEventListener("submit", function (e) {
-                const selectedBooks = document.querySelectorAll(".select-book:checked");
-                if (selectedBooks.length === 0) {
-                    e.preventDefault(); // Ngăn chặn gửi form
-                    showToast("Vui lòng chọn ít nhất một sách để xóa!", "warning");
-                }
-            });
         }
     });
 </script>

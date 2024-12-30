@@ -18,7 +18,6 @@ namespace LibraryManager.Controllers
         }
 
         [Authorize]
-        // Action nhận hai tham số userId và ISBN từ URL để tạo một bản ghi thuê sách
         [HttpPost]
         public JsonResult RentalDetail(string ISBN)
         {

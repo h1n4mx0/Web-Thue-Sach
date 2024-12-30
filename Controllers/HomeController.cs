@@ -112,9 +112,16 @@ namespace LibraryManager.Controllers
                 booksQuery = booksQuery.Where(b => b.Category.Name.Contains(searchQuery));
             }
 
-            
+            if (!author.HasValue && !category.HasValue) {
+                booksQuery = booksQuery.Where(b => b.Title.Contains(searchQuery) || 
+                                                    b.ISBN.Contains(searchQuery) ||
+                                                    b.Summary.Contains(searchQuery) ||
+                                                    b.RentalPrice.Contains(searchQuery) ||
+                                                    b.Status.Contains(searchQuery) ||
+                                                    b.Author.Name.Contains(searchQuery) || 
+                                                    b.Category.Name.Contains(searchQuery));
+            }
 
-           
             var results = booksQuery.ToList();
 
             // Truyền kết quả sang View
